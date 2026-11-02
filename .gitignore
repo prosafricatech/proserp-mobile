@@ -42,3 +42,7 @@ yarn-error.*
 
 # env
 .env
+
+# Private docs: work plan, progress book and learning notes stay on this machine only.
+proserp-mobile.md
+react-native-learning-path.md
