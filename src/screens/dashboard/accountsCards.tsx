@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import React, { useMemo, useRef, useState } from 'react';
-import { Platform, StyleSheet, useWindowDimensions, View } from 'react-native';
+import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import * as Print from 'expo-print';
 import { captureRef } from 'react-native-view-shot';
 import { LineChart, PieChart } from 'react-native-gifted-charts';
@@ -324,24 +324,17 @@ function DistributionPie({
   const colors = chartColors(palette);
   if (loading) return <ActivityIndicator style={{ height: 255 }} />;
 
-  const capture = async (format: 'png' | 'jpg') => {
-    const uri = await captureRef(shot, {
-      format,
-      quality: 1,
-      result: Platform.OS === 'web' ? 'data-uri' : 'tmpfile',
-    });
-    return uri;
-  };
+  // Screenshot of the chart as a temporary image file.
+  const capture = (format: 'png' | 'jpg') =>
+    captureRef(shot, { format, quality: 1, result: 'tmpfile' });
   const run = (fn: () => Promise<void>) => {
     setMenu(false);
     fn().catch((e) => setMessage(getErrorMessage(e)));
   };
   // The chart as a one-image HTML page, for printing and PDF.
   const imageHtml = async () => {
-    const src =
-      Platform.OS === 'web'
-        ? await capture('png')
-        : `data:image/png;base64,${await captureRef(shot, { format: 'png', result: 'base64' })}`;
+    const base64 = await captureRef(shot, { format: 'png', result: 'base64' });
+    const src = `data:image/png;base64,${base64}`;
     return `
       <html>
         <body style="margin: 0; display: flex; justify-content: center">

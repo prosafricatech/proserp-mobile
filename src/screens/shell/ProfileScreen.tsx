@@ -60,7 +60,6 @@ export default function ProfileScreen() {
       uri: asset.uri,
       name: asset.fileName ?? 'photo.jpg',
       type: asset.mimeType ?? 'image/jpeg',
-      file: asset.file,
     });
   };
 

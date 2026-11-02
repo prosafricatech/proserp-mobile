@@ -54,7 +54,6 @@ export default function ImageField<T extends FieldValues>({
             uri: asset.uri,
             name: asset.fileName ?? `${String(name)}.png`,
             type: asset.mimeType ?? 'image/png',
-            file: asset.file,
           } satisfies PickedFile);
         };
 

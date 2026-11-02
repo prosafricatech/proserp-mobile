@@ -1,13 +1,12 @@
 // A picked file, as expo-image-picker / expo-document-picker describe it.
-export type PickedFile = { uri: string; name: string; type: string; file?: File };
+export type PickedFile = { uri: string; name: string; type: string };
 
 export const isPickedFile = (value: unknown): value is PickedFile =>
   !!value && typeof value === 'object' && 'uri' in value && 'name' in value;
 
-// iOS/Android: RN's FormData takes { uri, name, type }. Web: it needs the real File.
 export const appendFile = (form: FormData, key: string, file: PickedFile) => {
-  if (file.file) form.append(key, file.file, file.name);
-  else form.append(key, { uri: file.uri, name: file.name, type: file.type } as unknown as Blob);
+  // React Native's FormData takes { uri, name, type } and streams the file from disk.
+  form.append(key, { uri: file.uri, name: file.name, type: file.type } as unknown as Blob);
 };
 
 // Same encoding as live-repo organizationServices.buildFormData(): skip null/undefined,
