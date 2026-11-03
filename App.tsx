@@ -6,6 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { LogBox, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider } from './src/auth/AuthProvider';
 import RootNavigator from './src/navigation/RootNavigator';
@@ -49,13 +50,16 @@ export default function App() {
     // The drawer's swipe gestures need react-native-gesture-handler's root view.
     <GestureHandlerRootView style={styles.flex}>
       <SafeAreaProvider>
-        <QueryClientProvider client={queryClient}>
-          <AppThemeProvider>
-            <AuthProvider>
-              <ThemedNavigation />
-            </AuthProvider>
-          </AppThemeProvider>
-        </QueryClientProvider>
+        {/* Tracks the keyboard frame by frame so forms can keep the focused field visible. */}
+        <KeyboardProvider>
+          <QueryClientProvider client={queryClient}>
+            <AppThemeProvider>
+              <AuthProvider>
+                <ThemedNavigation />
+              </AuthProvider>
+            </AppThemeProvider>
+          </QueryClientProvider>
+        </KeyboardProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

@@ -3,7 +3,8 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useMemo, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { Checkbox, Divider, Snackbar, Text } from 'react-native-paper';
 import * as yup from 'yup';
 import { getErrorMessage } from '../../api/client';
@@ -320,11 +321,12 @@ function OrganizationForm({
   );
 
   return (
-    <KeyboardAvoidingView
-      style={[styles.flex, { backgroundColor: palette.background }]}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
-      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+    <View style={[styles.flex, { backgroundColor: palette.background }]}>
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.content}
+        keyboardShouldPersistTaps="handled"
+        bottomOffset={24}
+      >
         <Section title={t.basicInfo} />
         <TextField
           control={control}
@@ -497,11 +499,11 @@ function OrganizationForm({
           type="error"
         />
         <GradientButton label={t.submit} onPress={submit} loading={mutation.isPending} />
-      </ScrollView>
+      </KeyboardAwareScrollView>
       <Snackbar visible={!!notice} onDismiss={() => setNotice(null)} duration={3000}>
         {notice}
       </Snackbar>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 

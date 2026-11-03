@@ -30,6 +30,7 @@
     "react-native": "0.88.1",
     "react-native-gesture-handler": "~3.3.0",
     "react-native-gifted-charts": "^1.4.81",
+    "react-native-keyboard-controller": "1.22.7",
     "react-native-paper": "^5.15.3",
     "react-native-paper-dates": "^0.24.1",
     "react-native-reanimated": "4.7.1",
@@ -42,6 +43,8 @@
   },
   "devDependencies": {
     "@types/react": "~19.3.0",
+    "eslint": "^9.0.0",
+    "eslint-config-expo": "~58.0.4",
     "prettier": "3.9.10",
     "typescript": "~6.0.3"
   },
@@ -50,7 +53,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "lint": "expo lint"
   },
   "private": true
 }

@@ -3,7 +3,8 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { getErrorMessage } from '../../api/client';
 import { applyServerErrors } from '../../auth/serverErrors';
 import { changePasswordSchema, type ChangePasswordValues } from '../../auth/validation';
@@ -43,47 +44,47 @@ export default function ChangePasswordScreen({ navigation }: Props) {
   const serverFieldError = Object.values(errors).some((e) => e?.type === 'server');
 
   return (
-    <KeyboardAvoidingView
+    <KeyboardAwareScrollView
       style={[styles.flex, { backgroundColor: palette.background }]}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      contentContainerStyle={styles.content}
+      keyboardShouldPersistTaps="handled"
+      bottomOffset={24}
     >
-      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-        <TextField
-          control={control}
-          name="current_password"
-          label={t.currentPassword}
-          icon="lock-outline"
-          password
-          autoComplete="current-password"
-          textContentType="password"
-        />
-        <TextField
-          control={control}
-          name="password"
-          label={t.newPassword}
-          icon="lock-outline"
-          password
-          autoComplete="new-password"
-          textContentType="newPassword"
-        />
-        <TextField
-          control={control}
-          name="password_confirmation"
-          label={t.confirmPassword}
-          icon="lock-outline"
-          password
-          autoComplete="new-password"
-          textContentType="newPassword"
-          returnKeyType="go"
-          onSubmitEditing={submit}
-        />
-        <FormMessage
-          message={mutation.isError && !serverFieldError ? getErrorMessage(mutation.error) : null}
-          type="error"
-        />
-        <GradientButton label={t.changePassword} onPress={submit} loading={mutation.isPending} />
-      </ScrollView>
-    </KeyboardAvoidingView>
+      <TextField
+        control={control}
+        name="current_password"
+        label={t.currentPassword}
+        icon="lock-outline"
+        password
+        autoComplete="current-password"
+        textContentType="password"
+      />
+      <TextField
+        control={control}
+        name="password"
+        label={t.newPassword}
+        icon="lock-outline"
+        password
+        autoComplete="new-password"
+        textContentType="newPassword"
+      />
+      <TextField
+        control={control}
+        name="password_confirmation"
+        label={t.confirmPassword}
+        icon="lock-outline"
+        password
+        autoComplete="new-password"
+        textContentType="newPassword"
+        returnKeyType="go"
+        onSubmitEditing={submit}
+      />
+      <FormMessage
+        message={mutation.isError && !serverFieldError ? getErrorMessage(mutation.error) : null}
+        type="error"
+      />
+      <GradientButton label={t.changePassword} onPress={submit} loading={mutation.isPending} />
+    </KeyboardAwareScrollView>
   );
 }
 

@@ -1,6 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, Platform, StyleSheet, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { Text } from 'react-native-paper';
 import ThemeToggle from '../common/ThemeToggle';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -22,53 +23,54 @@ export default function AuthLayout({ brandTitle, brandTagline, title, subtitle, 
 
   return (
     <SafeAreaView style={[styles.flex, { backgroundColor: palette.background }]}>
-      <KeyboardAvoidingView
+      {/* Scrolls the focused field above the keyboard on both platforms. */}
+      <KeyboardAwareScrollView
         style={styles.flex}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        contentContainerStyle={styles.page}
+        keyboardShouldPersistTaps="handled"
+        bottomOffset={24}
       >
-        <ScrollView contentContainerStyle={styles.page} keyboardShouldPersistTaps="handled">
-          <View
-            style={[
-              styles.card,
-              { backgroundColor: palette.background },
-              isDark ? { borderWidth: 1, borderColor: palette.divider } : styles.cardShadow,
-            ]}
+        <View
+          style={[
+            styles.card,
+            { backgroundColor: palette.background },
+            isDark ? { borderWidth: 1, borderColor: palette.divider } : styles.cardShadow,
+          ]}
+        >
+          <LinearGradient
+            colors={[palette.primary, brandLight]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.brand}
           >
-            <LinearGradient
-              colors={[palette.primary, brandLight]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.brand}
-            >
-              <Image
-                source={require('../../../assets/images/proserp-white.png')}
-                style={styles.logo}
-                resizeMode="contain"
-                accessibilityLabel="ProsERP"
-              />
-              <View>
-                <Text style={[styles.brandTitle, { color: palette.primaryContrast }]}>
-                  {brandTitle}
-                </Text>
-                <Text style={[styles.brandTagline, { color: palette.primaryContrast }]}>
-                  {brandTagline}
-                </Text>
-              </View>
-            </LinearGradient>
-
-            <View style={styles.form}>
-              <View style={styles.themeRow}>
-                <ThemeToggle />
-              </View>
-              <Text style={[styles.title, { color: palette.textPrimary }]}>{title}</Text>
-              {subtitle ? (
-                <Text style={[styles.subtitle, { color: palette.textSecondary }]}>{subtitle}</Text>
-              ) : null}
-              {children}
+            <Image
+              source={require('../../../assets/images/proserp-white.png')}
+              style={styles.logo}
+              resizeMode="contain"
+              accessibilityLabel="ProsERP"
+            />
+            <View>
+              <Text style={[styles.brandTitle, { color: palette.primaryContrast }]}>
+                {brandTitle}
+              </Text>
+              <Text style={[styles.brandTagline, { color: palette.primaryContrast }]}>
+                {brandTagline}
+              </Text>
             </View>
+          </LinearGradient>
+
+          <View style={styles.form}>
+            <View style={styles.themeRow}>
+              <ThemeToggle />
+            </View>
+            <Text style={[styles.title, { color: palette.textPrimary }]}>{title}</Text>
+            {subtitle ? (
+              <Text style={[styles.subtitle, { color: palette.textSecondary }]}>{subtitle}</Text>
+            ) : null}
+            {children}
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+        </View>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }

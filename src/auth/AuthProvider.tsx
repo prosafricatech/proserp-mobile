@@ -40,10 +40,8 @@ export type SignUpValues = {
 export type AuthContextType = AuthState & {
   isEmailVerified: boolean;
   signIn: (credentials: { email: string; password: string }) => Promise<void>;
-  // Resolves true when the backend logged the new user in, false when they must sign in.
   signUp: (values: SignUpValues) => Promise<boolean>;
   loadOrganization: (organizationId: string) => Promise<void>;
-  // After creating an organization: adopt the org-scoped token the backend returned.
   adoptOrganization: (data: LoginResponse) => Promise<void>;
   refreshAuth: () => Promise<CurrentUserResponse>;
   signOut: () => Promise<void>;
