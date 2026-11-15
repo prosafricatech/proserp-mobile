@@ -10,6 +10,7 @@ import { menuLabel } from '../i18n/menu';
 import { fonts } from '../theme/palette';
 import { useAppTheme } from '../theme/ThemeProvider';
 import type { MenuNode } from './moduleRegistry';
+import { MENU_ICONS } from './menuIcons';
 import { useMenu } from './useMenu';
 
 const t = dictionary.userMenu;
@@ -83,7 +84,7 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
           key={node.id}
           title={title}
           titleStyle={styles.itemTitle}
-          left={(p) => (node.icon ? <List.Icon {...p} icon={node.icon} /> : null)}
+          left={(p) => (node.icon ? <List.Icon {...p} icon={MENU_ICONS[node.icon]} /> : null)}
           // While searching every matching group is open, like web's isSearchActive.
           expanded={searching || !!expanded[node.id]}
           onPress={() => setExpanded((e) => ({ ...e, [node.id]: !e[node.id] }))}
@@ -109,7 +110,7 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
         left={(p) => (
           <List.Icon
             {...p}
-            icon={node.icon ?? 'circle-small'}
+            icon={node.icon ? MENU_ICONS[node.icon] : MENU_ICONS.fallback}
             color={active ? palette.primary : p.color}
           />
         )}

@@ -12,6 +12,7 @@ Read [`AGENTS.md`](./AGENTS.md) for Expo SDK, tooling, and environment-specific 
 
 - This app uses React Navigation. Navigators and their route parameter types live in `src/navigation/`; screens live in `src/screens/`. Do not introduce Expo Router routes unless the project is deliberately migrated.
 - Keep menu structure and route metadata in `src/navigation/moduleRegistry.ts`; keep permission/subscription gates and menu filtering in `src/navigation/menuPermissions.ts`, keyed by menu item ID.
+- Keep menu icon names in `src/navigation/menuIcons.ts` as a typed semantic registry, mirroring live-repo's `utilities/constants/icons.tsx`. Menu nodes store `MenuIconKey` values, not icon-library strings; resolve them when rendering the drawer.
 - Keep menu labels in `src/i18n/en/menu.ts` and `src/i18n/sw/menu.ts`. Resolve them with `menuLabel()`; do not put translated text or inline language pairs in the registry.
 - Keep route/report IDs stable across locales. Never use translated labels as React keys, route identity, or analytics identity.
 - Do not expose internal delivery-plan metadata such as `hatua` in routes or customer-facing screens. Use product-facing states such as “Coming soon” when a destination is not implemented.

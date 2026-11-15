@@ -1,4 +1,5 @@
 import type { MenuLabelKey } from '../i18n/menu';
+import type { MenuIconKey } from './menuIcons';
 
 // Declarative menu structure ported from live-repo's src/utilities/constants/menu-items.tsx.
 // Permission and subscription rules live separately in menuPermissions.ts.
@@ -8,7 +9,7 @@ import type { MenuLabelKey } from '../i18n/menu';
 export type MenuNode = {
   id: string;
   labelKey: MenuLabelKey;
-  icon?: string;
+  icon?: MenuIconKey;
   path?: string;
   screen?: 'Dashboard' | 'Organizations';
   children?: MenuNode[];
@@ -16,7 +17,7 @@ export type MenuNode = {
 
 const MASTERS: MenuLabelKey = 'masters';
 const REPORTS: MenuLabelKey = 'reports';
-const leaf = (id: string, labelKey: MenuLabelKey, path: string, icon?: string): MenuNode => ({
+const leaf = (id: string, labelKey: MenuLabelKey, path: string, icon?: MenuIconKey): MenuNode => ({
   id,
   labelKey,
   path,
@@ -31,7 +32,7 @@ export const MENU: MenuNode[] = [
       {
         id: 'dashboard',
         labelKey: 'dashboard',
-        icon: 'view-dashboard-outline',
+        icon: 'dashboard',
         path: '/dashboard',
         screen: 'Dashboard',
       },
@@ -40,19 +41,19 @@ export const MENU: MenuNode[] = [
   {
     id: 'processApproval',
     labelKey: 'processApproval',
-    icon: 'check-decagram-outline',
+    icon: 'processApproval',
     children: [
-      leaf('requisitions', 'requisitions', '/requisitions', 'file-document-edit-outline'),
-      leaf('approvals', 'approvals', '/requisition-approvals', 'check-all'),
-      leaf('retirements', 'retirements', '/retirements', 'cash-refund'),
+      leaf('requisitions', 'requisitions', '/requisitions', 'requisitions'),
+      leaf('approvals', 'approvals', '/requisition-approvals', 'approvals'),
+      leaf('retirements', 'retirements', '/retirements', 'retirements'),
       // Deliberately ungated on web: approvers act via their role on the approval chain.
-      leaf('paLeaveRequests', 'leaveRequests', '/humanResources/leave-requests', 'beach'),
-      leaf('paLoanRequests', 'loanRequests', '/humanResources/loan-requests', 'hand-coin-outline'),
-      leaf('paPayrollRuns', 'payrollRuns', '/humanResources/payroll-approvals', 'cash-multiple'),
+      leaf('paLeaveRequests', 'leaveRequests', '/humanResources/leave-requests', 'leaveRequests'),
+      leaf('paLoanRequests', 'loanRequests', '/humanResources/loan-requests', 'loanRequests'),
+      leaf('paPayrollRuns', 'payrollRuns', '/humanResources/payroll-approvals', 'payroll'),
       {
         id: 'paMasters',
         labelKey: MASTERS,
-        icon: 'tune-variant',
+        icon: 'masterSettings',
         children: [leaf('approvalChains', 'approvalChains', '/approval-chains')],
       },
     ],
@@ -60,22 +61,22 @@ export const MENU: MenuNode[] = [
   {
     id: 'pos',
     labelKey: 'pointOfSale',
-    icon: 'point-of-sale',
+    icon: 'pointOfSale',
     children: [
       {
         id: 'posSales',
         labelKey: 'sales',
-        icon: 'cash-register',
+        icon: 'sales',
         children: [
           leaf('salesCounter', 'salesCounter', '/pos/sales-counters'),
           leaf('proformas', 'proformas', '/pos/proformas'),
         ],
       },
-      leaf('posReports', REPORTS, '/pos/reports', 'chart-bar'),
+      leaf('posReports', REPORTS, '/pos/reports', 'posReports'),
       {
         id: 'posMasters',
         labelKey: MASTERS,
-        icon: 'cog-outline',
+        icon: 'settings',
         children: [
           leaf('outlets', 'outlets', '/pos/outlets', undefined),
           leaf('posPriceLists', 'priceLists', '/pos/price_lists', undefined),
@@ -87,15 +88,15 @@ export const MENU: MenuNode[] = [
   {
     id: 'fuelStations',
     labelKey: 'fuelStations',
-    icon: 'gas-station-outline',
+    icon: 'fuelStations',
     children: [
-      leaf('salesShifts', 'salesShifts', '/fuelStations/salesShifts', 'clock-outline'),
-      leaf('dippings', 'dippings', '/fuelStations/dippings', 'ruler'),
-      leaf('fuelReports', REPORTS, '/fuelStations/reports', 'chart-box-outline'),
+      leaf('salesShifts', 'salesShifts', '/fuelStations/salesShifts', 'fuelSalesShifts'),
+      leaf('dippings', 'dippings', '/fuelStations/dippings', 'dippings'),
+      leaf('fuelReports', REPORTS, '/fuelStations/reports', 'projectReports'),
       {
         id: 'fuelMasters',
         labelKey: MASTERS,
-        icon: 'tune-variant',
+        icon: 'masterSettings',
         children: [
           leaf('stations', 'stations', '/fuelStations/stations', undefined),
           leaf('fuelPriceLists', 'priceLists', '/fuelStations/price_lists', undefined),
@@ -107,14 +108,14 @@ export const MENU: MenuNode[] = [
     // Web renders Bio Production before Manufacturing (code order, not menu-items order).
     id: 'bioProduction',
     labelKey: 'bioProduction',
-    icon: 'sprout-outline',
+    icon: 'bioProduction',
     children: [
-      leaf('bioDashboard', 'dashboard', '/bioProduction/dashboard', 'view-dashboard-outline'),
-      leaf('bioBatches', 'batches', '/bioProduction/batches', 'layers-outline'),
+      leaf('bioDashboard', 'dashboard', '/bioProduction/dashboard', 'dashboard'),
+      leaf('bioBatches', 'batches', '/bioProduction/batches', 'bioBatches'),
       {
         id: 'dailyRecords',
         labelKey: 'dailyRecords',
-        icon: 'calendar-check-outline',
+        icon: 'dailyRecords',
         children: [
           leaf('feedingRound', 'feeding', '/bioProduction/rounds/feeding', undefined),
           leaf('mortalityRound', 'mortality', '/bioProduction/rounds/mortality', undefined),
@@ -133,7 +134,7 @@ export const MENU: MenuNode[] = [
       {
         id: 'bioMasters',
         labelKey: MASTERS,
-        icon: 'tune-variant',
+        icon: 'masterSettings',
         children: [
           leaf('farms', 'farms', '/bioProduction/farms', undefined),
           leaf('productionUnits', 'productionUnits', '/bioProduction/productionUnits', undefined),
@@ -156,19 +157,14 @@ export const MENU: MenuNode[] = [
   {
     id: 'manufacturing',
     labelKey: 'manufacturing',
-    icon: 'factory',
+    icon: 'manufacturing',
     children: [
-      leaf(
-        'productionBatches',
-        'productionBatches',
-        '/manufacturing/batches',
-        'file-document-edit-outline'
-      ),
-      leaf('manufacturingReports', REPORTS, '/manufacturing/reports', 'chart-box-outline'),
+      leaf('productionBatches', 'productionBatches', '/manufacturing/batches', 'requisitions'),
+      leaf('manufacturingReports', REPORTS, '/manufacturing/reports', 'projectReports'),
       {
         id: 'manufacturingMasters',
         labelKey: MASTERS,
-        icon: 'tune-variant',
+        icon: 'masterSettings',
         children: [leaf('boms', 'boms', '/manufacturing/boms')],
       },
     ],
@@ -176,26 +172,26 @@ export const MENU: MenuNode[] = [
   {
     id: 'projectManagement',
     labelKey: 'projectManagement',
-    icon: 'briefcase-outline',
+    icon: 'projects',
     children: [
-      leaf('projects', 'projects', '/projectManagement/projects', 'folder-outline'),
+      leaf('projects', 'projects', '/projectManagement/projects', 'projectList'),
       leaf(
         'subcontractCertificates',
         'subcontractCertificates',
         '/projectManagement/approvedSubcontractCertificates',
-        'certificate-outline'
+        'certificates'
       ),
       leaf(
         'projectPaymentClaims',
         'projectPaymentClaims',
         '/projectManagement/approvedProjectPaymentClaims',
-        'cash-check'
+        'approvedPayments'
       ),
-      leaf('projectReports', REPORTS, '/projectManagement/reports', 'chart-box-outline'),
+      leaf('projectReports', REPORTS, '/projectManagement/reports', 'projectReports'),
       {
         id: 'projectMasters',
         labelKey: MASTERS,
-        icon: 'file-tree-outline',
+        icon: 'projectMasters',
         children: [
           leaf('projectCategories', 'projectCategories', '/projectManagement/projectCategories'),
         ],
@@ -205,42 +201,42 @@ export const MENU: MenuNode[] = [
   {
     id: 'accounts',
     labelKey: 'accountsFinance',
-    icon: 'bank-outline',
+    icon: 'accountsFinance',
     children: [
-      leaf('approvedPayments', 'approvedPayments', '/accounts/approvedPayments', 'cash-check'),
+      leaf(
+        'approvedPayments',
+        'approvedPayments',
+        '/accounts/approvedPayments',
+        'approvedPayments'
+      ),
       leaf(
         'approvedPayrollRuns',
         'approvedPayroll',
         '/accounts/approvedPayrollRuns',
-        'account-cash-outline'
+        'payrollApprovals'
       ),
-      leaf('approvedLoans', 'approvedLoans', '/accounts/approvedLoans', 'hand-coin-outline'),
-      leaf('transactions', 'transactions', '/accounts/transactions', 'swap-horizontal'),
+      leaf('approvedLoans', 'approvedLoans', '/accounts/approvedLoans', 'loanRequests'),
+      leaf('transactions', 'transactions', '/accounts/transactions', 'transactions'),
       leaf(
         'recurringTransactions',
         'recurringTransactions',
         '/accounts/recurring-transactions',
-        'repeat'
+        'refresh'
       ),
       leaf(
         'bankReconciliation',
         'bankReconciliation',
         '/accounts/bank-reconciliation',
-        'scale-balance'
+        'costCenters'
       ),
-      leaf('supplierBills', 'supplierBills', '/accounts/supplierBills', 'receipt-text-outline'),
-      leaf(
-        'customerInvoices',
-        'customerInvoices',
-        '/accounts/customerInvoices',
-        'file-document-outline'
-      ),
-      leaf('accountsReports', REPORTS, '/accounts/reports', 'chart-box-outline'),
-      leaf('budgets', 'budgets', '/accounts/budgets', 'calculator-variant-outline'),
+      leaf('supplierBills', 'supplierBills', '/accounts/supplierBills', 'supplierBills'),
+      leaf('customerInvoices', 'customerInvoices', '/accounts/customerInvoices', 'invoices'),
+      leaf('accountsReports', REPORTS, '/accounts/reports', 'projectReports'),
+      leaf('budgets', 'budgets', '/accounts/budgets', 'budgets'),
       {
         id: 'accountsMasters',
         labelKey: MASTERS,
-        icon: 'currency-usd',
+        icon: 'accountMasters',
         children: [
           leaf('ledgerGroups', 'ledgerGroups', '/accounts/ledger_groups'),
           leaf('ledgers', 'ledgers', '/accounts/ledgers'),
@@ -253,15 +249,15 @@ export const MENU: MenuNode[] = [
   {
     id: 'assets',
     labelKey: 'assetRegister',
-    icon: 'archive-outline',
+    icon: 'assetRegister',
     children: [
-      leaf('assetRegister', 'register', '/assets', 'archive-outline'),
-      leaf('depreciationRuns', 'depreciationRuns', '/assets/depreciation-runs', 'trending-down'),
-      leaf('assetReports', REPORTS, '/assets/reports', 'chart-box-outline'),
+      leaf('assetRegister', 'register', '/assets', 'assetRegister'),
+      leaf('depreciationRuns', 'depreciationRuns', '/assets/depreciation-runs', 'depreciationRuns'),
+      leaf('assetReports', REPORTS, '/assets/reports', 'projectReports'),
       {
         id: 'assetMasters',
         labelKey: MASTERS,
-        icon: 'currency-usd',
+        icon: 'accountMasters',
         children: [leaf('assetGlMappings', 'glMappings', '/assets/gl-mappings')],
       },
     ],
@@ -269,28 +265,23 @@ export const MENU: MenuNode[] = [
   {
     id: 'assetBookings',
     labelKey: 'assetBookings',
-    icon: 'calendar-clock-outline',
-    children: [leaf('bookings', 'bookings', '/asset-bookings', 'calendar-clock-outline')],
+    icon: 'assetBookings',
+    children: [leaf('bookings', 'bookings', '/asset-bookings', 'assetBookings')],
   },
   {
     id: 'procurement',
     labelKey: 'procurementSupply',
-    icon: 'cart-outline',
+    icon: 'purchases',
     children: [
-      leaf('rfqs', 'rfqs', '/procurement/rfqs', 'file-question-outline'),
-      leaf(
-        'approvedPurchases',
-        'approvedPurchases',
-        '/procurement/approvedPurchases',
-        'cart-check'
-      ),
-      leaf('purchases', 'purchases', '/procurement/purchases', 'cart-outline'),
-      leaf('consumptions', 'consumptions', '/procurement/consumptions', 'package-down'),
-      leaf('procurementReports', REPORTS, '/procurement/reports', 'chart-bar'),
+      leaf('rfqs', 'rfqs', '/procurement/rfqs', 'rfqs'),
+      leaf('approvedPurchases', 'approvedPurchases', '/procurement/approvedPurchases', 'suppliers'),
+      leaf('purchases', 'purchases', '/procurement/purchases', 'purchases'),
+      leaf('consumptions', 'consumptions', '/procurement/consumptions', 'consumptions'),
+      leaf('procurementReports', REPORTS, '/procurement/reports', 'posReports'),
       {
         id: 'procurementMasters',
         labelKey: MASTERS,
-        icon: 'package-variant-closed',
+        icon: 'stores',
         children: [
           leaf(
             'productCategories',
@@ -307,33 +298,28 @@ export const MENU: MenuNode[] = [
   {
     id: 'humanResources',
     labelKey: 'humanResources',
-    icon: 'account-group-outline',
+    icon: 'employees',
     children: [
-      leaf('hrDashboard', 'dashboard', '/humanResources/dashboard', 'view-dashboard-outline'),
-      leaf('employees', 'employees', '/humanResources/employees', 'badge-account-outline'),
-      leaf('orgChart', 'orgChart', '/humanResources/orgChart', 'file-tree-outline'),
-      leaf('leaveRequests', 'leaveRequests', '/humanResources/leave-requests', 'beach'),
-      leaf('loanRequests', 'loanRequests', '/humanResources/loan-requests', 'hand-coin-outline'),
-      leaf(
-        'attendance',
-        'attendance',
-        '/humanResources/employeesAttendance',
-        'calendar-account-outline'
-      ),
+      leaf('hrDashboard', 'dashboard', '/humanResources/dashboard', 'dashboard'),
+      leaf('employees', 'employees', '/humanResources/employees', 'employee'),
+      leaf('orgChart', 'orgChart', '/humanResources/orgChart', 'projectMasters'),
+      leaf('leaveRequests', 'leaveRequests', '/humanResources/leave-requests', 'leaveRequests'),
+      leaf('loanRequests', 'loanRequests', '/humanResources/loan-requests', 'loanRequests'),
+      leaf('attendance', 'attendance', '/humanResources/employeesAttendance', 'attendance'),
       {
         id: 'payroll',
         labelKey: 'payroll',
-        icon: 'cash-multiple',
+        icon: 'payroll',
         children: [
           leaf('payrollRuns', 'payrollRuns', '/humanResources/payroll-runs'),
           leaf('payrollPeriods', 'payrollPeriods', '/humanResources/payroll-periods'),
         ],
       },
-      leaf('hrReports', 'humanResourcesReports', '/humanResources/reports', 'chart-box-outline'),
+      leaf('hrReports', 'humanResourcesReports', '/humanResources/reports', 'projectReports'),
       {
         id: 'hrMasters',
         labelKey: MASTERS,
-        icon: 'briefcase-variant-outline',
+        icon: 'hrMasters',
         children: [
           leaf('departments', 'departments', '/humanResources/departments'),
           leaf('designations', 'designations', '/humanResources/designations'),
@@ -355,28 +341,33 @@ export const MENU: MenuNode[] = [
   {
     id: 'tools',
     labelKey: 'tools',
-    icon: 'toolbox-outline',
-    children: [leaf('filesShelf', 'filesShelf', '/filesShelf', 'folder-multiple-outline')],
+    icon: 'tools',
+    children: [leaf('filesShelf', 'filesShelf', '/filesShelf', 'filesShelf')],
   },
   {
     id: 'masters',
     labelKey: 'masters',
-    icon: 'database-cog-outline',
+    icon: 'masters',
     children: [
-      leaf('currencies', 'currencies', '/masters/currencies', 'currency-usd'),
-      leaf('measurementUnits', 'measurementUnits', '/masters/measurement_units', 'scale'),
-      leaf('banks', 'banks', '/masters/banks', 'bank-outline'),
-      leaf('auditTrail', 'auditTrail', '/audit-trail', 'history'),
+      leaf('currencies', 'currencies', '/masters/currencies', 'accountMasters'),
+      leaf(
+        'measurementUnits',
+        'measurementUnits',
+        '/masters/measurement_units',
+        'measurementUnits'
+      ),
+      leaf('banks', 'banks', '/masters/banks', 'accountsFinance'),
+      leaf('auditTrail', 'auditTrail', '/audit-trail', 'auditTrail'),
       leaf(
         'accessControlReports',
         'accessControlReports',
         '/accessControlReports',
-        'shield-account-outline'
+        'accessControl'
       ),
       {
         id: 'stakeholders',
         labelKey: 'stakeholders',
-        icon: 'handshake-outline',
+        icon: 'stakeholders',
         children: [
           leaf('stakeholdersList', 'list', '/masters/stakeholders', undefined),
           leaf('stakeholderGroups', 'groups', '/masters/stakeholderGroups', undefined),
@@ -387,22 +378,22 @@ export const MENU: MenuNode[] = [
   {
     id: 'sms',
     labelKey: 'sms',
-    icon: 'message-text-outline',
-    children: [leaf('smsOverview', 'overview', '/sms', 'message-text-outline')],
+    icon: 'sms',
+    children: [leaf('smsOverview', 'overview', '/sms', 'sms')],
   },
   {
     id: 'organizations',
     labelKey: 'organizations',
-    icon: 'domain',
+    icon: 'organizations',
     children: [
       {
         id: 'organizationsList',
         labelKey: 'organizations',
-        icon: 'domain',
+        icon: 'organizations',
         path: '/organizations',
         screen: 'Organizations',
       },
-      leaf('invitations', 'invitations', '/invitations', 'email-outline'),
+      leaf('invitations', 'invitations', '/invitations', 'invitations'),
     ],
   },
 ];
