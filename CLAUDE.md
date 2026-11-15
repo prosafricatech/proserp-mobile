@@ -39,6 +39,17 @@ Read [`AGENTS.md`](./AGENTS.md) for Expo SDK, tooling, and environment-specific 
 - Keep date handling on dayjs and use shared dashboard formatting helpers where available. Preserve backend date formats expected by each service.
 - Use React Native Paper and the project's theme providers/styles for consistent cross-platform UI. Respect safe areas, accessibility roles/labels, and mobile touch targets.
 
+## Shared forms, lists, and master data
+
+- Reuse `src/components/list/MasterListScreen.tsx` for searchable paginated master lists. Keep server search debounced, support pull-to-refresh and empty/error/loading states, and make filter sheets commit and clear applied filters.
+- Use `src/components/form/FormKit.tsx` for master create/edit dialogs. Define field metadata next to the resource screen and keep validation in Yup; use `AsyncAutocompleteField` for large or organization-specific options rather than loading every row into a static dropdown.
+- Async selectors debounce search and wait for at least two characters before requesting matches. Scope query keys to the resource and any changing organization/resource ID.
+- Keep CRUD request mapping in `src/api/modules/<module>/<resource>/services.ts`. After a mutation, show localized feedback and invalidate the resource's list/detail queries.
+- When a live-repo service calls `/api/...`, inspect that Next route handler and copy the upstream backend URL, method, query, and body into mobile services. Do not copy the BFF route path when the handler rewrites it before calling the backend.
+- When porting master behavior, inspect its live-repo list item, action tail, form, selectors, and permission gates. Preserve rules such as protected base currencies, conditional measurement factors, stakeholder ledger type, group membership, and required cost-center user assignments while adapting dialogs and pickers to mobile.
+- Keep reusable selectors in `src/components/form/MasterSelectors.tsx` or use `AsyncAutocompleteField` with service-backed options. For multi-select fields, show selected values clearly, validate the minimum selection, and map IDs to the backend's expected types.
+- Tests use the SDK-matched `jest-expo` preset. Run `npm test -- --runInBand`; place pure helper tests in `__tests__/` and use React Native Testing Library for UI interactions.
+
 ## Verification
 
 - Before finishing code changes, run `npx expo lint` and `npx tsc --noEmit` (or the package-manager equivalent described in `AGENTS.md`). Do not add tests unless requested.

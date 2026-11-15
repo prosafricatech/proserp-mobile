@@ -185,6 +185,7 @@ const MENU_GATES: Record<string, Gate> = {
     any(
       P.ACCOUNTS_MASTERS_READ,
       P.ACCOUNTS_MASTERS_CREATE,
+      P.COST_CENTERS_ALL,
       P.ACCOUNTS_TRANSACTIONS_CREATE,
       P.ACCOUNTS_REPORTS,
       P.BUDGETS_READ
@@ -228,7 +229,7 @@ const MENU_GATES: Record<string, Gate> = {
   ),
   customerInvoices: any(P.ACCOUNTS_TRANSACTIONS_READ),
   accountsReports: any(P.ACCOUNTS_REPORTS),
-  accountsMasters: any(P.ACCOUNTS_MASTERS_READ, P.ACCOUNTS_MASTERS_CREATE),
+  accountsMasters: any(P.ACCOUNTS_MASTERS_READ, P.ACCOUNTS_MASTERS_CREATE, P.COST_CENTERS_ALL),
   assets: all(
     withOrg,
     sub(MODULES.ASSET_REGISTER),
@@ -326,6 +327,7 @@ const MENU_GATES: Record<string, Gate> = {
     any(P.STAKEHOLDERS_READ, P.MEASUREMENT_UNITS_READ, P.ACCOUNTS_MASTERS_CREATE)
   ),
   currencies: any(P.ACCOUNTS_MASTERS_CREATE),
+  costCenters: any(P.COST_CENTERS_ALL),
   measurementUnits: any(P.MEASUREMENT_UNITS_READ),
   auditTrail: any(P.AUDIT_READ),
   accessControlReports: any(P.ACCESS_CONTROL_REPORTS_READ),

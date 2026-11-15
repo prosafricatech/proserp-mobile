@@ -9,7 +9,7 @@ type Props<T extends FieldValues> = {
   control: Control<T>;
   name: Path<T>;
   label: string;
-  icon: string;
+  icon?: string;
   password?: boolean;
   disabled?: boolean;
   helper?: string; // shown under the field when there's no error
@@ -22,6 +22,8 @@ type Props<T extends FieldValues> = {
   | 'textContentType'
   | 'returnKeyType'
   | 'onSubmitEditing'
+  | 'multiline'
+  | 'numberOfLines'
 >;
 
 // Label-above outlined field with an optional leading icon, like the web forms
@@ -62,7 +64,11 @@ export default function TextField<T extends FieldValues>({
             disabled={disabled}
             error={!!error}
             secureTextEntry={password && !visible}
-            left={<TextInput.Icon icon={icon} color={palette.textSecondary} size={20} />}
+            left={
+              icon ? (
+                <TextInput.Icon icon={icon} color={palette.textSecondary} size={20} />
+              ) : undefined
+            }
             right={
               password ? (
                 <TextInput.Icon

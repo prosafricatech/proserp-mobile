@@ -68,6 +68,12 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
   const open = (node: MenuNode) => {
     if (node.screen === 'Dashboard') navigation.navigate('Dashboard');
     else if (node.screen === 'Organizations') navigation.getParent()?.navigate('Organizations');
+    else if (node.id === 'currencies') navigation.navigate('Currencies');
+    else if (node.id === 'measurementUnits') navigation.navigate('MeasurementUnits');
+    else if (node.id === 'banks') navigation.navigate('Banks');
+    else if (node.id === 'stakeholdersList') navigation.navigate('Stakeholders');
+    else if (node.id === 'stakeholderGroups') navigation.navigate('StakeholderGroups');
+    else if (node.id === 'costCenters') navigation.navigate('CostCenters');
     else
       navigation.navigate('ComingSoon', {
         id: node.id,
