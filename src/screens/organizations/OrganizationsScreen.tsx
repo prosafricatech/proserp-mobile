@@ -21,7 +21,10 @@ import { ErrorState, Loading } from '../../components/common/ScreenState';
 import { PERMISSIONS } from '../../constants/permissions';
 import { PROS_CONTROL_PERMISSIONS } from '../../constants/prosControlPermissions';
 import { dictionary, format } from '../../i18n';
-import { organizationsApi, type OrganizationListItem } from '../../api/modules/organizations/services';
+import {
+  organizationsApi,
+  type OrganizationListItem,
+} from '../../api/modules/organizations/services';
 import type { RootStackParamList } from '../../navigation/RootNavigator';
 import { fonts } from '../../theme/palette';
 import { useAppTheme } from '../../theme/ThemeProvider';

@@ -145,7 +145,11 @@ export function ProductSalesCard() {
   const [shareOpen, setShareOpen] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
-  const people = useQuery({ queryKey: ['salesPerson'], queryFn: dashboardApi.salesPeople });
+  const people = useQuery({
+    queryKey: ['salesPerson'],
+    queryFn: dashboardApi.salesPeople,
+  });
+
   const params = {
     from: chartFilters.from,
     to: chartFilters.to,
@@ -160,6 +164,7 @@ export function ProductSalesCard() {
     queryKey: ['topProducts', params],
     queryFn: () => dashboardApi.productSales(params),
   });
+
   const rows = query.data ?? [];
   const topLabel = TOP_LABEL[top];
   const cogsColor = isDark ? '#EF9A9A' : 'red';

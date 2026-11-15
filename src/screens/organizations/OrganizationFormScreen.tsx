@@ -2,7 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import React, { useMemo, useState } from 'react';
-import { Controller, useForm, useWatch } from 'react-hook-form';
+import { Controller, useForm, useWatch, type Control } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { Checkbox, Divider, Snackbar, Text } from 'react-native-paper';
@@ -25,7 +25,10 @@ import { MODULES } from '../../constants/modules';
 import { PERMISSIONS } from '../../constants/permissions';
 import { PROS_CONTROL_PERMISSIONS } from '../../constants/prosControlPermissions';
 import { dictionary } from '../../i18n';
-import { organizationsApi, type OrganizationValues } from '../../api/modules/organizations/services';
+import {
+  organizationsApi,
+  type OrganizationValues,
+} from '../../api/modules/organizations/services';
 import type { RootStackParamList } from '../../navigation/RootNavigator';
 import { darkPalette, fonts, lightPalette } from '../../theme/palette';
 import { useAppTheme } from '../../theme/ThemeProvider';
@@ -104,6 +107,44 @@ const schema = yup.object({
 
 type Values = yup.InferType<typeof schema>;
 const FIELDS = Object.keys(schema.fields) as (keyof Values)[];
+
+type CheckRowName =
+  | 'vat_registered'
+  | 'defer_grn_billing'
+  | 'defer_project_certificate_invoicing'
+  | 'generate_invoices_for_project_certificates';
+
+function CheckRow({
+  control,
+  name,
+  label,
+}: {
+  control: Control<Values>;
+  name: CheckRowName;
+  label: string;
+}) {
+  const { palette } = useAppTheme();
+  return (
+    <Controller
+      control={control}
+      name={name}
+      render={({ field: { value, onChange } }) => (
+        <View style={styles.checkRow}>
+          <Checkbox.Android
+            status={value ? 'checked' : 'unchecked'}
+            onPress={() => onChange(!value)}
+          />
+          <Text
+            style={[styles.checkLabel, { color: palette.textPrimary }]}
+            onPress={() => onChange(!value)}
+          >
+            {label}
+          </Text>
+        </View>
+      )}
+    />
+  );
+}
 
 const countryOptions: SelectOption[] = COUNTRIES.map((c) => ({
   value: c.code,
@@ -289,37 +330,6 @@ function OrganizationForm({
     [errors]
   );
 
-  const CheckRow = ({
-    name,
-    label,
-  }: {
-    name:
-      | 'vat_registered'
-      | 'defer_grn_billing'
-      | 'defer_project_certificate_invoicing'
-      | 'generate_invoices_for_project_certificates';
-    label: string;
-  }) => (
-    <Controller
-      control={control}
-      name={name}
-      render={({ field: { value, onChange } }) => (
-        <View style={styles.checkRow}>
-          <Checkbox.Android
-            status={value ? 'checked' : 'unchecked'}
-            onPress={() => onChange(!value)}
-          />
-          <Text
-            style={[styles.checkLabel, { color: palette.textPrimary }]}
-            onPress={() => onChange(!value)}
-          >
-            {label}
-          </Text>
-        </View>
-      )}
-    />
-  );
-
   return (
     <View style={[styles.flex, { backgroundColor: palette.background }]}>
       <KeyboardAwareScrollView
@@ -398,7 +408,7 @@ function OrganizationForm({
         />
 
         <Section title={t.vatSection} />
-        <CheckRow name="vat_registered" label={t.vatRegistered} />
+        <CheckRow control={control} name="vat_registered" label={t.vatRegistered} />
         {vatRegistered ? (
           <>
             <TextField
@@ -420,15 +430,19 @@ function OrganizationForm({
         ) : null}
 
         {hasProcurement || hasProjects ? <Section title={t.workflowSection} /> : null}
-        {hasProcurement ? <CheckRow name="defer_grn_billing" label={t.deferGrnBilling} /> : null}
+        {hasProcurement ? (
+          <CheckRow control={control} name="defer_grn_billing" label={t.deferGrnBilling} />
+        ) : null}
         {hasProjects ? (
           <CheckRow
+            control={control}
             name="defer_project_certificate_invoicing"
             label={t.deferCertificateInvoicing}
           />
         ) : null}
         {hasProjects ? (
           <CheckRow
+            control={control}
             name="generate_invoices_for_project_certificates"
             label={t.generateCertificateInvoices}
           />

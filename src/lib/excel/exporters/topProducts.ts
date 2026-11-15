@@ -101,7 +101,6 @@ export async function exportProductSalesExcel(exportedData: any): Promise<ArrayB
 
     let row = 8;
     let col = 65;
-    let costCenters: any = [];
 
     if (topProductsData.costCenters) {
       for (let c = 0; c < topProductsData.costCenters.length; c++) {

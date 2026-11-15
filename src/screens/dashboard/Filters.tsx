@@ -158,10 +158,13 @@ const TYPE_ORDER: [string | null, keyof typeof dictionary.dashboard.costCenterTy
 
 function CostCenterSelector() {
   const { authOrganization } = useAuth();
-  const { chartFilters, setChartFilters } = useDashboardSettings();
+  const { setChartFilters } = useDashboardSettings();
   const { palette } = useAppTheme();
   const [open, setOpen] = useState(false);
-  const options: CostCenter[] = authOrganization?.costCenters ?? [];
+  const options: CostCenter[] = useMemo(
+    () => authOrganization?.costCenters ?? [],
+    [authOrganization?.costCenters]
+  );
   // Empty selection = the default filters (web shows nothing pre-selected).
   const [selected, setSelected] = useState<CostCenter[]>([]);
 

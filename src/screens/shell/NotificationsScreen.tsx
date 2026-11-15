@@ -57,10 +57,22 @@ export default function NotificationsScreen() {
     queryClient.invalidateQueries({ queryKey: ['notifications'] });
     queryClient.invalidateQueries({ queryKey: ['notificationsUnread'] });
   };
-  const markRead = useMutation({ mutationFn: notificationsApi.markRead, onSuccess: refresh });
-  const markAllRead = useMutation({ mutationFn: notificationsApi.markAllRead, onSuccess: refresh });
-  const removeOne = useMutation({ mutationFn: notificationsApi.remove, onSuccess: refresh });
-  const removeAll = useMutation({
+  const markReadMutation = useMutation({
+    mutationFn: notificationsApi.markRead,
+    onSuccess: refresh,
+  });
+
+  const markAllReadMutation = useMutation({
+    mutationFn: notificationsApi.markAllRead,
+    onSuccess: refresh,
+  });
+
+  const removeNotificationMutation = useMutation({
+    mutationFn: notificationsApi.remove,
+    onSuccess: refresh,
+  });
+
+  const removeAllNotificationsMutation = useMutation({
     mutationFn: notificationsApi.removeAll,
     onSuccess: () => {
       setConfirmDelete(false);
@@ -82,7 +94,7 @@ export default function NotificationsScreen() {
         descriptionNumberOfLines={4}
         titleStyle={{ fontFamily: unread ? fonts.bold : fonts.regular, color: palette.textPrimary }}
         style={unread ? { backgroundColor: palette.background } : undefined}
-        onPress={() => unread && markRead.mutate(item.id)}
+        onPress={() => unread && markReadMutation.mutate(item.id)}
         left={(p) => (
           <View style={styles.leftIcon}>
             <List.Icon
@@ -94,7 +106,12 @@ export default function NotificationsScreen() {
           </View>
         )}
         right={(p) => (
-          <IconButton {...p} icon="close" size={18} onPress={() => removeOne.mutate(item.id)} />
+          <IconButton
+            {...p}
+            icon="close"
+            size={18}
+            onPress={() => removeNotificationMutation.mutate(item.id)}
+          />
         )}
       />
     );
@@ -108,8 +125,8 @@ export default function NotificationsScreen() {
           <Button
             icon="check-all"
             compact
-            onPress={() => markAllRead.mutate()}
-            loading={markAllRead.isPending}
+            onPress={() => markAllReadMutation.mutate()}
+            loading={markAllReadMutation.isPending}
           >
             {t.markAllRead}
           </Button>
@@ -147,8 +164,8 @@ export default function NotificationsScreen() {
             <Button onPress={() => setConfirmDelete(false)}>{t.cancel}</Button>
             <Button
               textColor={palette.error}
-              loading={removeAll.isPending}
-              onPress={() => removeAll.mutate()}
+              loading={removeAllNotificationsMutation.isPending}
+              onPress={() => removeAllNotificationsMutation.mutate()}
             >
               {t.delete}
             </Button>

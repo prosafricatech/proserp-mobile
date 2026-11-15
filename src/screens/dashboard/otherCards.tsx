@@ -21,7 +21,10 @@ const t = dictionary.dashboard;
 // --- HR: both cards read GET /hr-dashboard once (shared query key), unaffected by filters. ---
 
 const useHrDashboard = () =>
-  useQuery({ queryKey: ['hrDashboard'], queryFn: dashboardApi.hrDashboard });
+  useQuery({
+    queryKey: ['hrDashboard'],
+    queryFn: dashboardApi.hrDashboard,
+  });
 
 // live-repo humanResourcesCards/OnLeaveToday.tsx (phone layout: mini-cards).
 export function OnLeaveToday() {

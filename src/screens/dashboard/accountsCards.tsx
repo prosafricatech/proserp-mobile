@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import * as Print from 'expo-print';
 import { captureRef } from 'react-native-view-shot';
@@ -67,10 +67,13 @@ export function TrendChart({
   const { width } = useWindowDimensions();
   const chartWidth = width - 32 - 32 - 56;
   const fits = labels.length <= 12;
+
   if (!labels.length) return <View style={{ height }} />;
+
   const shown = fits ? sparseLabels(labels) : labels;
   const single = labels.length === 1;
   const scale = chartScale(series.flatMap((s) => s.values));
+
   return (
     <View>
       <LineChart

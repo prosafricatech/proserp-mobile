@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { Menu, Text, TextInput } from 'react-native-paper';
-import { Pressable } from 'react-native';
 import { dictionary } from '../../i18n';
 import type { Interval } from '../../api/modules/dashboard/services';
 import { fonts } from '../../theme/palette';
