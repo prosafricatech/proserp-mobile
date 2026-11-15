@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useAuth } from '../auth/AuthProvider';
-import { filterMenu, MENU, type GateContext } from './moduleRegistry';
+import { filterMenu, type GateContext } from './menuPermissions';
+import { MENU } from './moduleRegistry';
 
 // The menu the signed-in user may see, recomputed whenever the session changes
 // (login, org switch, refreshAuth). Mobile replacement for Sidebar.js's useEffect.

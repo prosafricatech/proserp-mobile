@@ -46,11 +46,11 @@ import { Card, chartColors, InfoAlert, IntervalSelect } from './ui';
 
 const t = dictionary.dashboard;
 
-// Opens a full report that is built in its own Hatua (web opens it in a dialog).
+// Opens a report placeholder (web opens the full report in a dialog).
 export const useOpenReport = () => {
   const navigation = useNavigation<any>();
-  return (id: string, title: string, path: string, hatua: number) =>
-    navigation.navigate('ComingSoon', { id, title, path, hatua });
+  return (id: string, title: string, path: string) =>
+    navigation.navigate('ComingSoon', { id, title, path });
 };
 
 // Shared multi-series trend chart (Recharts ComposedChart of Lines on web).
@@ -220,7 +220,7 @@ export function ProfitAndLossTrendCard() {
             iconColor={palette.primary}
             accessibilityLabel={t.tooltips.incomeStatement}
             onPress={() =>
-              openReport('incomeStatement', t.cards.incomeStatement, '/accounts/reports', 10)
+              openReport('incomeStatement', t.cards.incomeStatement, '/accounts/reports')
             }
           />
         </View>
@@ -281,9 +281,7 @@ export function BalanceSheetTrend() {
             size={30}
             iconColor={palette.primary}
             accessibilityLabel={t.tooltips.openBalanceSheetReport}
-            onPress={() =>
-              openReport('balanceSheet', t.cards.balanceSheet, '/accounts/reports', 10)
-            }
+            onPress={() => openReport('balanceSheet', t.cards.balanceSheet, '/accounts/reports')}
           />
         </View>
       }
@@ -430,19 +428,19 @@ function DistributionPie({
               iconColor="#666"
               size={18}
               onPress={() => setMenu(true)}
-              accessibilityLabel="Chart context menu"
+              accessibilityLabel={dictionary.accessibility.chartContextMenu}
             />
           }
         >
           <Menu.Item
-            title="View in full screen"
+            title={dictionary.accessibility.viewFullscreen}
             onPress={() => {
               setMenu(false);
               setFullScreen(true);
             }}
           />
           <Menu.Item
-            title="Print chart"
+            title={dictionary.accessibility.printChart}
             onPress={() =>
               run(async () => {
                 await Print.printAsync({ html: await imageHtml() });
@@ -451,19 +449,19 @@ function DistributionPie({
           />
           <Divider />
           <Menu.Item
-            title="Download PNG image"
+            title={dictionary.accessibility.downloadPng}
             onPress={() =>
               run(async () => shareImage(await capture('png'), 'chart.png', 'image/png'))
             }
           />
           <Menu.Item
-            title="Download JPEG image"
+            title={dictionary.accessibility.downloadJpeg}
             onPress={() =>
               run(async () => shareImage(await capture('jpg'), 'chart.jpg', 'image/jpeg'))
             }
           />
           <Menu.Item
-            title="Download PDF document"
+            title={dictionary.accessibility.downloadPdf}
             onPress={() => run(async () => sharePdf(await imageHtml(), 'chart.pdf'))}
           />
         </Menu>
@@ -664,7 +662,7 @@ export function DueInvoicesCard() {
       {total > rows.length ? (
         <Button
           onPress={() =>
-            openReport('apArAging', 'A/P & A/R Aging', '/accounts/reports?report=ap-ar-aging', 10)
+            openReport('apArAging', 'A/P & A/R Aging', '/accounts/reports?report=ap-ar-aging')
           }
         >
           {format(t.viewAllAging, { n: total })}
@@ -695,7 +693,7 @@ export function DueInvoicesCard() {
                 t.cards.payables,
                 outgoing,
                 outgoingTotal,
-                checkOrganizationPermission('SupplierBills:Edit')
+                checkOrganizationPermission(PERMISSIONS.SUPPLIER_BILLS_EDIT)
               )
             : null}
           {!incoming.length && !outgoing.length ? <InfoAlert>{t.noDueInvoices}</InfoAlert> : null}

@@ -462,7 +462,7 @@ function OrganizationForm({
           name="employee_number_prefix"
           label={t.employeePrefix}
           icon="format-letter-case-upper"
-          placeholder="e.g. PROS"
+          placeholder={t.employeePrefixPlaceholder}
           autoCapitalize="characters"
           helper={t.employeePrefixHelper}
         />
@@ -471,7 +471,7 @@ function OrganizationForm({
           name="employee_number_padding"
           label={t.employeeDigits}
           icon="numeric"
-          placeholder="e.g. 4"
+          placeholder={t.employeeDigitsPlaceholder}
           keyboardType="number-pad"
           helper={t.employeeDigitsHelper}
         />

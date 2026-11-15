@@ -13,7 +13,7 @@ import AppDrawerContent from './AppDrawerContent';
 
 export type DrawerParamList = {
   Dashboard: undefined;
-  ComingSoon: { id: string; title: string; path?: string; hatua?: number };
+  ComingSoon: { id: string; title: string; path?: string };
   Notifications: undefined;
   Profile: undefined;
 };

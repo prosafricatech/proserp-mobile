@@ -6,7 +6,9 @@ import { LineChart } from 'react-native-gifted-charts';
 import { ActivityIndicator, Chip, Icon, Text } from 'react-native-paper';
 import { useAuth } from '../../auth/AuthProvider';
 import { MODULES } from '../../constants/modules';
+import { PERMISSIONS } from '../../constants/permissions';
 import { dictionary, format, language } from '../../i18n';
+import { menuLabel } from '../../i18n/menu';
 import { dashboardApi } from '../../api/modules/dashboard/services';
 import { MENU, type MenuNode } from '../../navigation/moduleRegistry';
 import { fonts } from '../../theme/palette';
@@ -18,34 +20,25 @@ import { Card, chartColors, InfoAlert, SelectMenu, SubHeading } from './ui';
 
 const t = dictionary.dashboard;
 
-// --- HR: both cards read GET /hr-dashboard once (shared query key), unaffected by filters. ---
-
 const useHrDashboard = () =>
   useQuery({
     queryKey: ['hrDashboard'],
     queryFn: dashboardApi.hrDashboard,
   });
 
-// live-repo humanResourcesCards/OnLeaveToday.tsx (phone layout: mini-cards).
 export function OnLeaveToday() {
   const { palette } = useAppTheme();
   const openReport = useOpenReport();
   const rows = useHrDashboard().data?.employees_on_leave ?? [];
   return (
     <Card title={t.cards.employeesOnLeaveToday}>
-      {/* Web has no loading state here: the empty text shows while loading. */}
       {rows.length ? (
         rows.map((r) => (
           <Pressable
             key={r.employee_id}
             style={[styles.mini, { borderColor: palette.divider }]}
             onPress={() =>
-              openReport(
-                'employee',
-                r.employee_name,
-                `/humanResources/employees/${r.employee_id}`,
-                6
-              )
+              openReport('employee', r.employee_name, `/humanResources/employees/${r.employee_id}`)
             }
           >
             <View style={styles.flex}>
@@ -67,7 +60,6 @@ export function OnLeaveToday() {
   );
 }
 
-// live-repo humanResourcesCards/BirthdaysToday.tsx: every row the backend returns (30-day window).
 export function BirthdaysToday() {
   const { palette } = useAppTheme();
   const openReport = useOpenReport();
@@ -80,12 +72,7 @@ export function BirthdaysToday() {
             key={r.employee_id}
             style={[styles.mini, { borderColor: palette.divider }]}
             onPress={() =>
-              openReport(
-                'employee',
-                r.employee_name,
-                `/humanResources/employees/${r.employee_id}`,
-                6
-              )
+              openReport('employee', r.employee_name, `/humanResources/employees/${r.employee_id}`)
             }
           >
             <View style={styles.flex}>
@@ -113,8 +100,6 @@ export function BirthdaysToday() {
     </Card>
   );
 }
-
-// --- Fuel: live-repo fuelStationCards/{DippingsCard,DippingTrend,LatestDippings}.tsx ---
 
 type DippingMode = 'closing' | 'deviation' | 'stock';
 
@@ -173,6 +158,7 @@ export function DippingsCard() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stations, mode]);
+
   const colors = chartColors(palette);
 
   return (
@@ -279,9 +265,9 @@ export function DippingsCard() {
   );
 }
 
-// --- Quick Links / Quick Reports: tiles; each destination is built in its own Hatua. ---
+// --- Quick Links / Quick Reports: tiles that open the report placeholder. ---
 
-type Tile = { label: string; icon: string; show: boolean; onPress: () => void };
+type Tile = { id: string; label: string; icon: string; show: boolean; onPress: () => void };
 
 function TileGrid({ title, tiles }: { title: string; tiles: Tile[] }) {
   const { palette } = useAppTheme();
@@ -292,7 +278,7 @@ function TileGrid({ title, tiles }: { title: string; tiles: Tile[] }) {
       <View style={styles.grid}>
         {visible.map((tile) => (
           <Pressable
-            key={tile.label}
+            key={tile.id}
             style={styles.tile}
             onPress={tile.onPress}
             accessibilityRole="button"
@@ -314,166 +300,207 @@ const findByPath = (nodes: MenuNode[], path: string): MenuNode | undefined => {
   }
 };
 
-// live-repo dashboard/QuickLinks.tsx
 export function QuickLinks() {
   const { organizationHasSubscribed: sub, checkOrganizationPermission: can } = useAuth();
   const openReport = useOpenReport();
   const go = (path: string) => {
     const node = findByPath(MENU, path);
-    openReport(node?.id ?? path, node?.label[language] ?? path, path, node?.hatua ?? 0);
+    openReport(node?.id ?? path, node ? menuLabel(node.labelKey, language) : path, path);
   };
   const tiles: Tile[] = [
     {
-      label: 'Projects',
+      id: 'projects',
+      label: t.quickLinkLabels.projects,
       icon: 'format-list-bulleted',
       show:
         sub(MODULES.PROJECT_MANAGEMENT) &&
-        can(['Projects:Read', 'Projects:Create', 'Projects:Edit', 'Projects:Delete']),
+        can([
+          PERMISSIONS.PROJECTS_READ,
+          PERMISSIONS.PROJECTS_CREATE,
+          PERMISSIONS.PROJECTS_EDIT,
+          PERMISSIONS.PROJECTS_DELETE,
+        ]),
       onPress: () => go('/projectManagement/projects'),
     },
     {
-      label: 'Batches',
+      id: 'batches',
+      label: t.quickLinkLabels.batches,
       icon: 'qrcode',
       show:
         sub(MODULES.MANUFACTURING_AND_PROCESSING) &&
         can([
-          'BOM:Read',
-          'BOM:Create',
-          'BOM:Edit',
-          'BOM:Delete',
-          'ProductionBatches:Create',
-          'ProductionBatches:Read',
-          'ProductionBatches:Update',
-          'ProductionBatches:Delete',
-          'ManufacturingOrders:Create',
-          'ManufacturingOrders:Read',
-          'ManufacturingOrders:Edit',
-          'ManufacturingOrders:Delete',
+          PERMISSIONS.BOM_READ,
+          PERMISSIONS.BOM_CREATE,
+          PERMISSIONS.BOM_EDIT,
+          PERMISSIONS.BOM_DELETE,
+          PERMISSIONS.PRODUCTION_BATCHES_CREATE,
+          PERMISSIONS.PRODUCTION_BATCHES_READ,
+          PERMISSIONS.PRODUCTION_BATCHES_EDIT,
+          PERMISSIONS.PRODUCTION_BATCHES_DELETE,
+          PERMISSIONS.MANUFACTURING_ORDERS_CREATE,
+          PERMISSIONS.MANUFACTURING_ORDERS_READ,
+          PERMISSIONS.MANUFACTURING_ORDERS_EDIT,
+          PERMISSIONS.MANUFACTURING_ORDERS_DELETE,
         ]),
       onPress: () => go('/manufacturing/batches'),
     },
     {
-      label: 'Sales Shift',
+      id: 'salesShift',
+      label: t.quickLinkLabels.salesShift,
       icon: 'gas-station',
       show:
         sub(MODULES.FUEL_STATION) &&
         can([
-          'FuelSalesShifts:Read',
-          'FuelSalesShifts:Create',
-          'FuelSalesShifts:Update',
-          'FuelSalesShifts:Delete',
-          'FuelSalesShifts:Close',
+          PERMISSIONS.FUEL_SALES_SHIFTS_READ,
+          PERMISSIONS.FUEL_SALES_SHIFTS_CREATE,
+          PERMISSIONS.FUEL_SALES_SHIFTS_UPDATE,
+          PERMISSIONS.FUEL_SALES_SHIFTS_DELETE,
+          PERMISSIONS.FUEL_SALES_SHIFTS_CLOSE,
         ]),
       onPress: () => go('/fuelStations/salesShifts'),
     },
     {
-      label: 'Sales',
+      id: 'sales',
+      label: t.quickLinkLabels.sales,
       icon: 'point-of-sale',
       show:
         sub(MODULES.POINT_OF_SALE) &&
-        can(['Sales:Read', 'Sales:Create', 'Sales:Edit', 'Sales:Complete']),
+        can([
+          PERMISSIONS.SALES_READ,
+          PERMISSIONS.SALES_CREATE,
+          PERMISSIONS.SALES_EDIT,
+          PERMISSIONS.SALES_COMPLETE,
+        ]),
       onPress: () => go('/pos/sales-counters'),
     },
     {
-      label: 'Purchases',
+      id: 'purchases',
+      label: t.quickLinkLabels.purchases,
       icon: 'cart-outline',
       show:
         sub(MODULES.PROCUREMENT_AND_SUPPLY) &&
-        can(['Purchases:Read', 'Purchases:Create', 'Purchases:Receive']),
+        can([
+          PERMISSIONS.PURCHASES_READ,
+          PERMISSIONS.PURCHASES_CREATE,
+          PERMISSIONS.PURCHASES_RECEIVE,
+        ]),
       onPress: () => go('/procurement/purchases'),
     },
     {
-      label: 'Requisitions',
+      id: 'requisitions',
+      label: t.quickLinkLabels.requisitions,
       icon: 'format-list-numbered-rtl',
       show:
         sub(MODULES.PROCESS_APPROVAL) &&
-        can(['Requisitions:Read', 'Requisitions:Create', 'Requisitions:Edit']),
+        can([
+          PERMISSIONS.REQUISITIONS_READ,
+          PERMISSIONS.REQUISITIONS_CREATE,
+          PERMISSIONS.REQUISITIONS_EDIT,
+        ]),
       onPress: () => go('/requisitions'),
     },
     {
-      label: 'Transactions',
+      id: 'transactions',
+      label: t.quickLinkLabels.transactions,
       icon: 'receipt-text-outline',
       show:
         sub(MODULES.ACCOUNTS_AND_FINANCE) &&
         can([
-          'AccountsTransactions:Read',
-          'AccountsTransactions:Create',
-          'AccountsTransactions:Delete',
-          'AccountsTransactions:Edit',
-          'Payments:Read',
-          'Payments:Create',
-          'Payments:Edit',
-          'Payments:Delete',
-          'FundTransfers:Read',
-          'FundTransfers:Create',
-          'FundTransfers:Delete',
-          'FundTransfers:Edit',
-          'Receipts:Read',
-          'Receipts:Edit',
-          'Receipts:Create',
-          'Receipts:Delete',
-          'JournalVouchers:Read',
-          'JournalVouchers:Create',
-          'JournalVouchers:Delete',
-          'JournalVouchers:Edit',
+          PERMISSIONS.ACCOUNTS_TRANSACTIONS_READ,
+          PERMISSIONS.ACCOUNTS_TRANSACTIONS_CREATE,
+          PERMISSIONS.ACCOUNTS_TRANSACTIONS_DELETE,
+          PERMISSIONS.ACCOUNTS_TRANSACTIONS_EDIT,
+          PERMISSIONS.PAYMENTS_READ,
+          PERMISSIONS.PAYMENTS_CREATE,
+          PERMISSIONS.PAYMENTS_EDIT,
+          PERMISSIONS.PAYMENTS_DELETE,
+          PERMISSIONS.FUND_TRANSFERS_READ,
+          PERMISSIONS.FUND_TRANSFERS_CREATE,
+          PERMISSIONS.FUND_TRANSFERS_DELETE,
+          PERMISSIONS.FUND_TRANSFERS_EDIT,
+          PERMISSIONS.RECEIPTS_READ,
+          PERMISSIONS.RECEIPTS_EDIT,
+          PERMISSIONS.RECEIPTS_CREATE,
+          PERMISSIONS.RECEIPTS_DELETE,
+          PERMISSIONS.JOURNAL_VOUCHERS_READ,
+          PERMISSIONS.JOURNAL_VOUCHERS_CREATE,
+          PERMISSIONS.JOURNAL_VOUCHERS_DELETE,
+          PERMISSIONS.JOURNAL_VOUCHERS_EDIT,
         ]),
       onPress: () => go('/accounts/transactions'),
     },
     {
-      label: 'Ledgers',
+      id: 'ledgers',
+      label: t.quickLinkLabels.ledgers,
       icon: 'book-open-page-variant-outline',
-      show: sub(MODULES.ACCOUNTS_AND_FINANCE) && can('AccountsMasters:Read'),
+      show: sub(MODULES.ACCOUNTS_AND_FINANCE) && can(PERMISSIONS.ACCOUNTS_MASTERS_READ),
       onPress: () => go('/accounts/ledgers'),
     },
     {
-      label: 'Stores',
+      id: 'stores',
+      label: t.quickLinkLabels.stores,
       icon: 'package-variant-closed',
       show:
         sub(MODULES.PROCUREMENT_AND_SUPPLY) &&
         can([
-          'Stores:Read',
-          'Stores:Create',
-          'InventoryTransfers:Read',
-          'InventoryTransfers:Create',
-          'InventoryConsumptions:Read',
-          'InventoryConsumptions:Create',
+          PERMISSIONS.STORES_READ,
+          PERMISSIONS.STORES_CREATE,
+          PERMISSIONS.INVENTORY_TRANSFERS_READ,
+          PERMISSIONS.INVENTORY_TRANSFERS_CREATE,
+          PERMISSIONS.INVENTORY_CONSUMPTIONS_READ,
+          PERMISSIONS.INVENTORY_CONSUMPTIONS_CREATE,
         ]),
       onPress: () => go('/procurement/stores'),
     },
     {
-      label: language === 'sw' ? 'Uchambuzi wa Bidhaa' : 'Product Insights',
+      id: 'productInsights',
+      label: t.quickLinkLabels.productInsights,
       icon: 'chart-line',
       show:
         sub(MODULES.PROCUREMENT_AND_SUPPLY) &&
-        can(['Stores:Reports', 'Purchases:Reports', 'Accounts:Reports'], true),
-      onPress: () => openReport('productInsights', 'Product Insights', '/procurement/reports', 8),
+        can(
+          [PERMISSIONS.STORES_REPORTS, PERMISSIONS.PURCHASES_REPORTS, PERMISSIONS.ACCOUNTS_REPORTS],
+          true
+        ),
+      onPress: () =>
+        openReport('productInsights', t.quickLinkLabels.productInsights, '/procurement/reports'),
     },
     {
-      label: 'Products',
+      id: 'products',
+      label: t.quickLinkLabels.products,
       icon: 'qrcode',
       show:
         sub(MODULES.PROCUREMENT_AND_SUPPLY) &&
-        can(['Products:Read', 'Products:Create', 'Products:Edit']),
+        can([PERMISSIONS.PRODUCTS_READ, PERMISSIONS.PRODUCTS_CREATE, PERMISSIONS.PRODUCTS_EDIT]),
       onPress: () => go('/procurement/products'),
     },
     {
-      label: 'Employees',
+      id: 'employees',
+      label: t.quickLinkLabels.employees,
       icon: 'account-group-outline',
       show:
         sub(MODULES.HUMAN_RESOURCES) &&
-        can(['Employees:Read', 'Employees:Create', 'Employees:Update']),
+        can([
+          PERMISSIONS.EMPLOYEES_READ,
+          PERMISSIONS.EMPLOYEES_CREATE,
+          PERMISSIONS.EMPLOYEES_UPDATE,
+        ]),
       onPress: () => go('/humanResources/employees'),
     },
     {
-      label: 'Payroll Runs',
+      id: 'payrollRuns',
+      label: t.quickLinkLabels.payrollRuns,
       icon: 'chart-box-outline',
-      show: sub(MODULES.HUMAN_RESOURCES) && can(['PayrollRuns:Create', 'Payroll:Read']),
+      show:
+        sub(MODULES.HUMAN_RESOURCES) &&
+        can([PERMISSIONS.PAYROLLRUNS_CREATE, PERMISSIONS.PAYROLL_READ]),
       onPress: () => go('/humanResources/payroll-runs'),
     },
     {
-      label: 'Asset Bookings',
+      id: 'assetBookings',
+      label: t.quickLinkLabels.assetBookings,
       icon: 'calendar-month-outline',
-      show: sub(MODULES.ASSET_BOOKINGS) && can('AssetBookings:Read'),
+      show: sub(MODULES.ASSET_BOOKINGS) && can(PERMISSIONS.ASSET_BOOKINGS_READ),
       onPress: () => go('/asset-bookings'),
     },
   ];
@@ -485,17 +512,21 @@ export function QuickReports() {
   const { organizationHasSubscribed: sub, checkOrganizationPermission: can } = useAuth();
   const openReport = useOpenReport();
   const report = (
-    label: string,
+    id: keyof typeof t.quickReportLabels,
     icon: string,
     show: boolean,
-    path: string,
-    hatua: number
-  ): Tile => ({
-    label,
-    icon,
-    show,
-    onPress: () => openReport(label, label, path, hatua),
-  });
+    path: string
+  ): Tile => {
+    const label = t.quickReportLabels[id];
+
+    return {
+      id,
+      label,
+      icon,
+      show,
+      onPress: () => openReport(id, label, path),
+    };
+  };
   const fuel = sub(MODULES.FUEL_STATION);
   const pos = sub(MODULES.POINT_OF_SALE);
   const af = sub(MODULES.ACCOUNTS_AND_FINANCE);
@@ -503,93 +534,81 @@ export function QuickReports() {
   const hr = sub(MODULES.HUMAN_RESOURCES);
   const tiles: Tile[] = [
     report(
-      'Sales & Cash Summary',
+      'salesCashSummary',
       'text-box-outline',
-      (fuel || pos) && can('Sales:Reports'),
-      '/pos/reports',
-      9
+      (fuel || pos) && can(PERMISSIONS.SALES_REPORTS),
+      '/pos/reports'
     ),
     report(
-      'Sales Manifest',
+      'salesManifest',
       'clipboard-list-outline',
-      pos && can('Sales:Reports'),
-      '/pos/reports',
-      9
+      pos && can(PERMISSIONS.SALES_REPORTS),
+      '/pos/reports'
     ),
-    report('Sales Performance', 'podium', pos && can('Sales:Reports'), '/pos/reports', 9),
-    report('Cashier Report', 'cash', af && can('Accounts:Reports'), '/accounts/reports', 10),
-    report('Dipping Report', 'table', fuel, '/fuelStations/reports', 12),
+    report('salesPerformance', 'podium', pos && can(PERMISSIONS.SALES_REPORTS), '/pos/reports'),
+    report('cashierReport', 'cash', af && can(PERMISSIONS.ACCOUNTS_REPORTS), '/accounts/reports'),
+    report('dippingReport', 'table', fuel, '/fuelStations/reports'),
     report(
-      'Tank Stock Report',
+      'tankStockReport',
       'chart-bar',
-      fuel && can(['Stores:Reports', 'FuelStations:Reports']),
-      '/fuelStations/reports',
-      12
+      fuel && can([PERMISSIONS.STORES_REPORTS, PERMISSIONS.FUEL_STATIONS_REPORTS]),
+      '/fuelStations/reports'
     ),
     report(
-      'Stock Report',
+      'stockReport',
       'cube-outline',
-      proc && can('Stores:Reports'),
-      '/procurement/reports',
-      8
+      proc && can(PERMISSIONS.STORES_REPORTS),
+      '/procurement/reports'
     ),
     report(
-      'Item Movement',
+      'itemMovement',
       'timeline-text-outline',
-      proc && can('Stores:Reports'),
-      '/procurement/reports',
-      8
+      proc && can(PERMISSIONS.STORES_REPORTS),
+      '/procurement/reports'
     ),
     report(
-      'Stock Movement',
+      'stockMovement',
       'newspaper-variant-outline',
-      proc && can('Stores:Reports'),
-      '/procurement/reports',
-      8
+      proc && can(PERMISSIONS.STORES_REPORTS),
+      '/procurement/reports'
     ),
     report(
-      'Debtors & Creditors',
+      'debtorsCreditors',
       'cash-multiple',
-      af && can('Accounts:Reports'),
-      '/accounts/reports',
-      10
+      af && can(PERMISSIONS.ACCOUNTS_REPORTS),
+      '/accounts/reports'
     ),
     report(
-      'A/P & A/R Aging',
+      'apArAging',
       'chart-timeline-variant',
-      af && can('Accounts:Reports'),
-      '/accounts/reports',
-      10
+      af && can(PERMISSIONS.ACCOUNTS_REPORTS),
+      '/accounts/reports'
     ),
-    report('FV Report', 'receipt', fuel, '/fuelStations/reports', 12),
-    report('Shifts Summary Report', 'history', fuel, '/fuelStations/reports', 12),
+    report('fvReport', 'receipt', fuel, '/fuelStations/reports'),
+    report('shiftsSummaryReport', 'history', fuel, '/fuelStations/reports'),
     report(
-      'Payroll Components Summary',
+      'payrollComponentsSummary',
       'receipt-text-outline',
-      hr && can('Payroll:Read'),
-      '/humanResources/reports',
-      7
+      hr && can(PERMISSIONS.PAYROLL_READ),
+      '/humanResources/reports'
     ),
     report(
-      'Leave Balances',
+      'leaveBalances',
       'beach',
-      hr && can('LeaveAllocations:Read'),
-      '/humanResources/reports',
-      6
+      hr && can(PERMISSIONS.LEAVE_ALLOCATIONS_READ),
+      '/humanResources/reports'
     ),
     report(
-      'Staff Loans',
+      'staffLoans',
       'file-document-outline',
-      hr && can('Loans:Read'),
-      '/humanResources/reports',
-      6
+      hr && can(PERMISSIONS.LOANS_READ),
+      '/humanResources/reports'
     ),
     report(
-      'Project Status Report',
+      'projectStatusReport',
       'chart-box-outline',
-      sub(MODULES.PROJECT_MANAGEMENT) && can('Projects:Reports'),
-      '/projectManagement/reports',
-      11
+      sub(MODULES.PROJECT_MANAGEMENT) && can(PERMISSIONS.PROJECTS_REPORTS),
+      '/projectManagement/reports'
     ),
   ];
   return <TileGrid title={t.cards.quickReports} tiles={tiles} />;

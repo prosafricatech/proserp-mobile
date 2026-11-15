@@ -60,7 +60,7 @@ export type ForgotPasswordValues = yup.InferType<typeof forgotPasswordSchema>;
 export type ResetPasswordValues = yup.InferType<typeof resetPasswordSchema>;
 
 // The reset email links to the web app (…/reset-password?token=…&email=…), which a phone
-// opens in the browser. Until the app handles those links itself (universal links, Hatua 14),
+// opens in the browser. Until the app handles those links itself (universal links),
 // the user pastes the link — or just the token — and we pull the values out here.
 export const parseResetLink = (input: string): { token: string | null; email: string | null } => {
   const value = input.trim();

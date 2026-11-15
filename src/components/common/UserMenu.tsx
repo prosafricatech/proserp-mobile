@@ -109,7 +109,6 @@ export default function UserMenu() {
                       id: 'organizationProfile',
                       title: organization.name,
                       path: `/organizations/profile/${organization.id}`,
-                      hatua: 13,
                     })
                   )
                 }

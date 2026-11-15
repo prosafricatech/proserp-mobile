@@ -119,7 +119,7 @@ export default function NotificationsScreen() {
 
   return (
     <View style={[styles.flex, { backgroundColor: palette.paper }]}>
-      <Text style={[styles.heading, { color: palette.textPrimary }]}>Notifications</Text>
+      <Text style={[styles.heading, { color: palette.textPrimary }]}>{t.title}</Text>
       {items.length > 0 && (
         <View style={styles.actions}>
           <Button

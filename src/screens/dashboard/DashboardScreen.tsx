@@ -55,7 +55,7 @@ function Dashboard() {
       contentContainerStyle={styles.content}
     >
       {!hasSubs ? <Alert color="#F39711">{t.noSubscriptions}</Alert> : null}
-      {alerting.length > 0 && can('Subscriptions:Manage')
+      {alerting.length > 0 && can(PERMISSIONS.SUBSCRIPTIONS_MANAGE)
         ? alerting.map((s, i) => (
             <Alert key={s.id ?? i} color={s.days_remaining > 0 ? '#F39711' : palette.error}>
               {t.subscriptionPrefix}

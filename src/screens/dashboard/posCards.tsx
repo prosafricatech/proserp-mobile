@@ -212,7 +212,7 @@ export function ProductSalesCard() {
         <View style={styles.titleRow}>
           <Text style={[styles.top, { color: palette.textPrimary }]}>{t.top}</Text>
           <SelectMenu
-            label="-----"
+            label={t.orderBy}
             value={top}
             onChange={setTop}
             options={[

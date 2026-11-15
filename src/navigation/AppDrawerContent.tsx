@@ -6,6 +6,7 @@ import React, { useMemo, useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { Divider, IconButton, List, Searchbar, Text } from 'react-native-paper';
 import { dictionary, language } from '../i18n';
+import { menuLabel } from '../i18n/menu';
 import { fonts } from '../theme/palette';
 import { useAppTheme } from '../theme/ThemeProvider';
 import type { MenuNode } from './moduleRegistry';
@@ -27,7 +28,9 @@ const filterMenu = (nodes: MenuNode[], term: string): MenuNode[] => {
   const q = term.trim().toLowerCase();
   if (!q) return nodes;
   return nodes.flatMap((node) => {
-    const matchesSelf = `${node.label[language]} ${node.path ?? ''}`.toLowerCase().includes(q);
+    const matchesSelf = `${menuLabel(node.labelKey, language)} ${node.path ?? ''}`
+      .toLowerCase()
+      .includes(q);
     const children = node.children ? filterMenu(node.children, q) : [];
     if (matchesSelf || children.length)
       return [{ ...node, children: children.length ? children : node.children }];
@@ -67,14 +70,13 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
     else
       navigation.navigate('ComingSoon', {
         id: node.id,
-        title: node.label[language],
+        title: menuLabel(node.labelKey, language),
         path: node.path,
-        hatua: node.hatua,
       });
   };
 
   const renderNode = (node: MenuNode, depth: number): React.ReactNode => {
-    const title = node.label[language];
+    const title = menuLabel(node.labelKey, language);
     if (node.children) {
       return (
         <List.Accordion
@@ -132,7 +134,7 @@ export default function AppDrawerContent(props: DrawerContentComponentProps) {
         <IconButton
           icon="menu-open"
           onPress={() => navigation.closeDrawer()}
-          accessibilityLabel="Close drawer"
+          accessibilityLabel={dictionary.accessibility.closeDrawer}
         />
       </View>
       <Searchbar

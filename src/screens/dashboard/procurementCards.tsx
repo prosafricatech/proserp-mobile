@@ -71,6 +71,7 @@ export function InventoryValueTrend() {
       });
     },
   });
+
   const rows = query.data ?? [];
   // Which area series exist is decided by the first row, as on web.
   const keys = rows[0]

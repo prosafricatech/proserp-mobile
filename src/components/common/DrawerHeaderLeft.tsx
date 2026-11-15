@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
+import { dictionary } from '../../i18n';
 import { useAppTheme } from '../../theme/ThemeProvider';
 import RoundIconButton from './RoundIconButton';
 
@@ -14,13 +15,14 @@ export default function DrawerHeaderLeft() {
   const queryClient = useQueryClient();
   const { palette } = useAppTheme();
   const open = useDrawerStatus() === 'open';
+  const t = dictionary.accessibility;
 
   return (
     <View style={styles.row}>
       <RoundIconButton
         icon={open ? 'menu-open' : 'menu'}
         onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-        accessibilityLabel="Show navigation menu"
+        accessibilityLabel={t.showNavigationMenu}
       />
       {navigation.canGoBack() ? (
         <IconButton
@@ -28,7 +30,7 @@ export default function DrawerHeaderLeft() {
           size={22}
           iconColor={palette.textPrimary}
           onPress={() => navigation.goBack()}
-          accessibilityLabel="Back"
+          accessibilityLabel={t.back}
         />
       ) : null}
       {/* Web's refresh re-renders the page with fresh data: here, refetch every visible query. */}
@@ -37,7 +39,7 @@ export default function DrawerHeaderLeft() {
         size={22}
         iconColor={palette.textPrimary}
         onPress={() => queryClient.invalidateQueries()}
-        accessibilityLabel="Refresh"
+        accessibilityLabel={t.refresh}
       />
     </View>
   );

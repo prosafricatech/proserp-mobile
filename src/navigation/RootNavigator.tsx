@@ -27,7 +27,7 @@ export type RootStackParamList = {
   App: NavigatorScreenParams<DrawerParamList> | undefined; // the drawer (nested navigator)
   Organizations: undefined;
   OrganizationForm: { organizationId?: string } | undefined;
-  ComingSoon: { id: string; title: string; path?: string; hatua?: number };
+  ComingSoon: { id: string; title: string; path?: string };
   ChangePassword: undefined;
   ProfileStandalone: undefined;
 };

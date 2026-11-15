@@ -147,7 +147,6 @@ export default function OrganizationsScreen({ navigation }: Props) {
                         id: 'invitations',
                         title: dictionary.organizationsList.invitationLink,
                         path: '/invitations',
-                        hatua: 13,
                       })
                     }
                   >
@@ -172,7 +171,6 @@ export default function OrganizationsScreen({ navigation }: Props) {
                   id: 'organizationProfile',
                   title: `${item.name} ${t.profile}`,
                   path: `/organizations/profile/${item.id}`,
-                  hatua: 13,
                 })
               }
               onMessage={setMessage}

@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../../auth/AuthProvider';
+import { PERMISSIONS } from '../../constants/permissions';
 import type { CostCenterIds } from '../../api/modules/dashboard/services';
 
 export type CostCenter = {
@@ -37,7 +38,7 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
     from: dayjs().startOf('month').toISOString(),
     to: dayjs().endOf('day').toISOString(),
     cost_center_ids:
-      authUser?.user?.is_admin || checkOrganizationPermission('CostCenters:All')
+      authUser?.user?.is_admin || checkOrganizationPermission(PERMISSIONS.COST_CENTERS_ALL)
         ? 'all'
         : orgCostCenters.map((c) => c.id),
     costCenters: orgCostCenters,

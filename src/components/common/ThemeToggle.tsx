@@ -1,4 +1,5 @@
 import React from 'react';
+import { dictionary } from '../../i18n';
 import { useAppTheme } from '../../theme/ThemeProvider';
 import RoundIconButton from './RoundIconButton';
 
@@ -10,7 +11,7 @@ export default function ThemeToggle() {
     <RoundIconButton
       icon={isDark ? 'weather-night' : 'white-balance-sunny'}
       onPress={() => setMode(isDark ? 'light' : 'dark')}
-      accessibilityLabel="Toggle theme"
+      accessibilityLabel={dictionary.accessibility.toggleTheme}
     />
   );
 }
