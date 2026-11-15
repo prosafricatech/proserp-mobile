@@ -42,3 +42,12 @@ Read [`AGENTS.md`](./AGENTS.md) for Expo SDK, tooling, and environment-specific 
 ## Verification
 
 - Before finishing code changes, run `npx expo lint` and `npx tsc --noEmit` (or the package-manager equivalent described in `AGENTS.md`). Do not add tests unless requested.
+
+## Security follow-ups — pending before production readiness
+
+- [ ] Verify on the backend that every protected endpoint enforces user permissions, organization scope, and resource ownership. Mobile permission checks only control UI visibility and are not an authorization boundary. The backend has not been audited as part of this repository review.
+- [ ] Confirm the backend token expiration and refresh policy, and add server-side token revocation to logout if the API supports it. Mobile logout currently clears local credentials only.
+- [ ] Enforce HTTPS for production API base URLs and verify the API URL configured in each EAS environment. Permit HTTP only for an explicit local-development case.
+- [ ] Review the current `npm audit --omit=dev` moderate findings (`glob`/`minimatch`, `node-forge`, and `uuid` via `exceljs`) and select updates compatible with this Expo SDK. Do not use `npm audit fix --force` without reviewing its proposed breaking downgrades.
+
+Keep these items marked pending until their implementation or backend verification is recorded. Lint and typecheck passing does not close this security review.

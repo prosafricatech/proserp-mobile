@@ -58,6 +58,10 @@ Run lint and typecheck before declaring any task done.
 - Follow the web data-flow conventions in mobile form: UI uses TanStack Query for lifecycle, feature services own backend requests and mapping, and shared transport stays in `src/api/client.ts`. Do not copy Next.js proxy routes or web-only MUI patterns into the mobile app.
 - For feature parity, retain web behavior for permissions, modules, and user-visible capabilities while adapting layout and interactions to React Native.
 
+## Security status
+
+- Treat the security follow-ups in `CLAUDE.md` as pending until verified. In particular, client-side permission checks do not replace backend authorization, and passing lint/typecheck is not a security audit.
+
 ## Building with EAS
 
 Use EAS to build, sign, and submit the app in the cloud (`eas build`, `eas submit`) and to ship over-the-air updates (`eas update`) — no local Xcode or Android Studio required. Run EAS CLI as `bunx eas-cli <command>` in Bun projects, or `npx eas-cli@latest <command>` otherwise; substitute that for bare `eas` in docs examples.
