@@ -7,14 +7,12 @@ import DashboardScreen from '../screens/dashboard/DashboardScreen';
 import ComingSoonScreen from '../screens/shell/ComingSoonScreen';
 import NotificationsScreen from '../screens/shell/NotificationsScreen';
 import ProfileScreen from '../screens/shell/ProfileScreen';
-import {
-  BanksScreen,
-  CostCentersScreen,
-  CurrenciesScreen,
-  MeasurementUnitsScreen,
-  StakeholderGroupsScreen,
-  StakeholdersScreen,
-} from '../screens/masters/MasterScreens';
+import { Banks } from '../screens/masters/banks/Banks';
+import { CostCenters } from '../screens/masters/costCenters/CostCenters';
+import { Currencies } from '../screens/masters/currencies/Currencies';
+import { MeasurementUnits } from '../screens/masters/measurementUnits/MeasurementUnits';
+import { StakeholderGroups } from '../screens/masters/stakeholderGroups/StakeholderGroups';
+import { Stakeholders } from '../screens/masters/stakeholders/Stakeholders';
 import { fonts } from '../theme/palette';
 import { useAppTheme } from '../theme/ThemeProvider';
 import AppDrawerContent from './AppDrawerContent';
@@ -78,32 +76,32 @@ export default function AppDrawer() {
       />
       <Drawer.Screen
         name="Currencies"
-        component={CurrenciesScreen}
+        component={Currencies}
         options={{ title: dictionary.masters.currencies.title }}
       />
       <Drawer.Screen
         name="MeasurementUnits"
-        component={MeasurementUnitsScreen}
+        component={MeasurementUnits}
         options={{ title: dictionary.masters.measurementUnits.title }}
       />
       <Drawer.Screen
         name="Banks"
-        component={BanksScreen}
+        component={Banks}
         options={{ title: dictionary.masters.banks.title }}
       />
       <Drawer.Screen
         name="Stakeholders"
-        component={StakeholdersScreen}
+        component={Stakeholders}
         options={{ title: dictionary.masters.stakeholders.title }}
       />
       <Drawer.Screen
         name="StakeholderGroups"
-        component={StakeholderGroupsScreen}
+        component={StakeholderGroups}
         options={{ title: dictionary.masters.stakeholderGroups.title }}
       />
       <Drawer.Screen
         name="CostCenters"
-        component={CostCentersScreen}
+        component={CostCenters}
         options={{ title: dictionary.masters.costCenters.title }}
       />
     </Drawer.Navigator>

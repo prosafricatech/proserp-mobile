@@ -11,21 +11,18 @@ import {
   Searchbar,
   Text,
 } from 'react-native-paper';
-import type { PageResult } from '../../api/modules/masters/types';
-import { dictionary } from '../../i18n';
-import { fonts } from '../../theme/palette';
-import { useAppTheme } from '../../theme/ThemeProvider';
-import { EmptyState, ErrorState } from '../common/ScreenState';
+import { dictionary } from '../../../i18n';
+import { fonts } from '../../../theme/palette';
+import { useAppTheme } from '../../../theme/ThemeProvider';
+import { EmptyState, ErrorState } from '../../common/ScreenState';
+import type { JumboRqPage, JumboRqPageRequest, JumboRqPageResponse } from './types';
 
-type PageRequest<F> = { page: number; limit: number; keyword: string } & F;
-type PageResponse<T> = PageResult<T> | { data: PageResult<T> } | T[];
-
-function readPage<T>(result: PageResponse<T>) {
-  const page: PageResult<T> = Array.isArray(result)
+function readPage<T>(result: JumboRqPageResponse<T>) {
+  const page: JumboRqPage<T> = Array.isArray(result)
     ? { data: result }
     : 'current_page' in result || 'last_page' in result
-      ? (result as PageResult<T>)
-      : (result as { data: PageResult<T> }).data;
+      ? (result as JumboRqPage<T>)
+      : (result as { data: JumboRqPage<T> }).data;
   return {
     items: Array.isArray(page.data) ? page.data : [],
     currentPage: page.current_page ?? 1,
@@ -37,7 +34,7 @@ function readPage<T>(result: PageResponse<T>) {
 type Props<T, F extends Record<string, unknown>> = {
   title: string;
   queryKey: readonly unknown[];
-  fetchPage: (params: PageRequest<F>) => Promise<PageResponse<T>>;
+  fetchPage: (params: JumboRqPageRequest<F>) => Promise<JumboRqPageResponse<T>>;
   filters: F;
   emptyFilters: F;
   onFiltersChange: (filters: F) => void;
@@ -46,12 +43,13 @@ type Props<T, F extends Record<string, unknown>> = {
   filterContent?: (value: F, onChange: (next: F) => void) => React.ReactNode;
   onCreate?: () => void;
   createLabel?: string;
+  actionTail?: React.ReactNode;
   pageSize?: number;
 };
 
 // Shared FlatList pattern for searchable master data: debounced server search,
 // pagination, pull-to-refresh, filter sheet, and consistent empty/error states.
-export default function MasterListScreen<T, F extends Record<string, unknown>>({
+export default function JumboRqList<T, F extends Record<string, unknown>>({
   title,
   queryKey,
   fetchPage,
@@ -63,6 +61,7 @@ export default function MasterListScreen<T, F extends Record<string, unknown>>({
   filterContent,
   onCreate,
   createLabel,
+  actionTail,
   pageSize = 20,
 }: Props<T, F>) {
   const { palette } = useAppTheme();
@@ -106,11 +105,12 @@ export default function MasterListScreen<T, F extends Record<string, unknown>>({
         <Text variant="headlineSmall" style={[styles.title, { color: palette.textPrimary }]}>
           {title}
         </Text>
-        {onCreate ? (
-          <Button icon="plus" mode="contained" onPress={onCreate}>
-            {createLabel ?? t.add}
-          </Button>
-        ) : null}
+        {actionTail ??
+          (onCreate ? (
+            <Button icon="plus" mode="contained" onPress={onCreate}>
+              {createLabel ?? t.add}
+            </Button>
+          ) : null)}
       </View>
 
       <View style={styles.searchRow}>

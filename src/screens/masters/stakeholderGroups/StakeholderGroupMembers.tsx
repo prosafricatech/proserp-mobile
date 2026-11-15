@@ -14,12 +14,12 @@ import {
   Text,
 } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import type { StakeholderGroup } from '../../api/modules/masters/types';
-import { stakeholderGroupsApi } from '../../api/modules/masters/stakeholderGroups/services';
-import { stakeholdersApi } from '../../api/modules/masters/stakeholders/services';
-import { dictionary } from '../../i18n';
-import { useAppTheme } from '../../theme/ThemeProvider';
-import { useAuth } from '../../auth/AuthProvider';
+import type { StakeholderGroup } from '../../../api/modules/masters/types';
+import { stakeholderGroupsApi } from '../../../api/modules/masters/stakeholderGroups/services';
+import { stakeholdersApi } from '../../../api/modules/masters/stakeholders/services';
+import { dictionary } from '../../../i18n';
+import { useAppTheme } from '../../../theme/ThemeProvider';
+import { useAuth } from '../../../auth/AuthProvider';
 
 type Props = {
   group: StakeholderGroup | null;
