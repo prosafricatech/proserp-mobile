@@ -15,7 +15,7 @@ import { getErrorMessage } from '../../api/client';
 import { useAuth } from '../../auth/AuthProvider';
 import { dictionary } from '../../i18n';
 import { escapeHtml, sharePdf } from '../../lib/files/share';
-import { dashboardApi, type Interval, type LowStockStore } from '../../modules/dashboard/api';
+import { dashboardApi, type Interval, type LowStockStore } from '../../api/modules/dashboard/services';
 import { fonts } from '../../theme/palette';
 import { useAppTheme } from '../../theme/ThemeProvider';
 import { Legend } from './accountsCards';

@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Button, Text, TextInput } from 'react-native-paper';
-import { authApi } from '../../api/authApi';
+import { authApi } from '../../api/auth/services';
 import { getErrorMessage } from '../../api/client';
 import { useAuth } from '../../auth/AuthProvider';
 import AuthLayout from '../../components/auth/AuthLayout';

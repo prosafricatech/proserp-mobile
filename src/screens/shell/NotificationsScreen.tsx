@@ -13,7 +13,7 @@ import {
 } from 'react-native-paper';
 import { EmptyState, ErrorState, Loading } from '../../components/common/ScreenState';
 import { dictionary } from '../../i18n';
-import { notificationsApi, type NotificationItem } from '../../modules/notifications/api';
+import { notificationsApi, type NotificationItem } from '../../api/modules/notifications/services';
 import { fonts } from '../../theme/palette';
 import { useAppTheme } from '../../theme/ThemeProvider';
 

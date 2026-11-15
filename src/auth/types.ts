@@ -8,7 +8,7 @@ export interface User {
   is_admin: boolean;
   email_verified_at?: string | null;
   photo_path?: string | null;
-  organization_roles?: Array<{ id?: string; name: string }>;
+  organization_roles?: { id?: string; name: string }[];
   [key: string]: any;
 }
 

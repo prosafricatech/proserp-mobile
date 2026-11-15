@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import axios from 'axios';
+import { isAxiosError } from 'axios';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { getErrorMessage } from '../../api/client';
@@ -38,7 +38,7 @@ export default function LoginScreen({ navigation, route }: Props) {
       // Wrong credentials come back as 401 {"message":"Invalid Credentials"}; a plain
       // Error means the response had no token. Either way show the web's wording.
       const isCredentialError =
-        !axios.isAxiosError(e) || e.response?.status === 401 || e.response?.status === 422;
+        !isAxiosError(e) || e.response?.status === 401 || e.response?.status === 422;
       setError(isCredentialError ? t.errors.loginError : getErrorMessage(e, t.errors.loginError));
     }
   };

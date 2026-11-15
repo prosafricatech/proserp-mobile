@@ -28,7 +28,7 @@ import { getErrorMessage } from '../../api/client';
 import { useAuth } from '../../auth/AuthProvider';
 import { PERMISSIONS } from '../../constants/permissions';
 import { dictionary, format } from '../../i18n';
-import { dashboardApi, type DueInvoice, type Interval } from '../../modules/dashboard/api';
+import { dashboardApi, type DueInvoice, type Interval } from '../../api/modules/dashboard/services';
 import { fonts } from '../../theme/palette';
 import { useAppTheme } from '../../theme/ThemeProvider';
 import { useDashboardSettings } from './DashboardContext';
@@ -59,7 +59,7 @@ export function TrendChart({
   labels,
   height = 196,
 }: {
-  series: Array<{ name: string; color: string; values: number[] }>;
+  series: { name: string; color: string; values: number[] }[];
   labels: string[];
   height?: number;
 }) {
@@ -117,7 +117,7 @@ export function TrendChart({
           pointerLabelWidth: 180,
           pointerLabelHeight: 20 + series.length * 18,
           autoAdjustPointerLabelPosition: true,
-          pointerLabelComponent: (items: Array<{ value: number }>, _: unknown, index: number) => (
+          pointerLabelComponent: (items: { value: number }[], _: unknown, index: number) => (
             <View
               style={[
                 styles.tooltip,
@@ -144,7 +144,7 @@ export function Legend({
   items,
   shape = 'line',
 }: {
-  items: Array<{ name: string; color: string }>;
+  items: { name: string; color: string }[];
   shape?: 'line' | 'square';
 }) {
   const { palette } = useAppTheme();
@@ -309,7 +309,7 @@ function DistributionPie({
   loading,
   title,
 }: {
-  data: Array<{ name: string; y: number }>;
+  data: { name: string; y: number }[];
   loading: boolean;
   title: string;
 }) {
@@ -546,7 +546,7 @@ export function ExpenseDistributionCard() {
       }),
     enabled: !!prevPeriod,
   });
-  const sum = (rows?: Array<{ amount: number }>) =>
+  const sum = (rows?: { amount: number }[]) =>
     (rows ?? []).reduce((s, r) => s + Number(r.amount || 0), 0);
 
   return (

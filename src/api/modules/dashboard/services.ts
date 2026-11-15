@@ -1,10 +1,10 @@
-import { api } from '../../api/client';
+import { api } from '../../client';
 
 // Every endpoint behind live-repo's dashboard (src/components/dashboard/**), called directly
 // instead of through the Next BFF routes. Params mirror what web sends; axios serialises
 // arrays as key[]=1&key[]=2, exactly like web.
 
-export type CostCenterIds = 'all' | Array<string | number>;
+export type CostCenterIds = 'all' | (string | number)[];
 export type Interval = 'day' | 'week' | 'month' | 'year';
 export type Range = { from: string; to: string; cost_center_ids: CostCenterIds };
 export type PeriodAmount = { period: string; amount: number };
@@ -39,47 +39,47 @@ export type DueInvoicesSummary = {
 export type LowStockStore = {
   id: number;
   name: string;
-  alerts: Array<{
+  alerts: {
     product_name: string;
     threshold: number;
     available_stock: number;
-    cost_centers: Array<{ name: string }>;
-  }>;
+    cost_centers: { name: string }[];
+  }[];
 };
 
 export type HrDashboard = {
-  employees_on_leave: Array<{
+  employees_on_leave: {
     employee_id: number;
     employee_number?: string;
     employee_name: string;
     leave_type?: string;
     returns_in_days: number;
-  }>;
-  upcoming_birthdays: Array<{
+  }[];
+  upcoming_birthdays: {
     employee_id: number;
     employee_number?: string;
     employee_name: string;
     next_birthday: string;
     days_away: number;
-  }>;
+  }[];
 };
 
 export type DippingStation = {
   id: number;
   name: string;
-  report_data: Array<{
+  report_data: {
     as_at: string;
-    readings: Array<{
+    readings: {
       id: number;
       name: string;
-      tanks: Array<{
+      tanks: {
         tank: string;
         reading: number;
         calculated_stock?: number;
         deviation?: number;
-      }>;
-    }>;
-  }>;
+      }[];
+    }[];
+  }[];
 };
 
 export type ProductSale = {
@@ -109,7 +109,7 @@ export const dashboardApi = {
   // BalanceSheetTrend
   balanceSheetFigures: (params: Range & { aggregate_by: Interval }) =>
     api
-      .get<Array<{ period: string; assetsFigure: number; liabilitiesFigure: number }>>(
+      .get<{ period: string; assetsFigure: number; liabilitiesFigure: number }[]>(
         '/accounts/balance-sheet-figures',
         { params }
       )
@@ -118,17 +118,17 @@ export const dashboardApi = {
   // RevenueDistributionCard (ledgerGroupId 3) / ExpenseDistributionCard (ledgerGroupId 19)
   incomeFigures: (params: Range & { ledgerGroupId: number; group_by_ledgers: boolean }) =>
     api
-      .get<Array<{ ledger_name: string; amount: number }>>('/accounts/income-figures', { params })
+      .get<{ ledger_name: string; amount: number }[]>('/accounts/income-figures', { params })
       .then((r) => r.data),
   expenseFigures: (params: Range & { ledgerGroupId: number; group_by_ledgers: boolean }) =>
     api
-      .get<Array<{ ledger_name: string; amount: number }>>('/accounts/expense-figures', { params })
+      .get<{ ledger_name: string; amount: number }[]>('/accounts/expense-figures', { params })
       .then((r) => r.data),
 
   // InventoryValueTrend
   inventoryValue: (params: Range & { aggregate_by: Interval; group_by: 'product_category' }) =>
     api
-      .get<Array<{ asOf: string; groupedValues: Record<string, { balanceValue: number }> }>>(
+      .get<{ asOf: string; groupedValues: Record<string, { balanceValue: number }> }[]>(
         '/accounts/inventory-value',
         { params }
       )
@@ -161,7 +161,7 @@ export const dashboardApi = {
   dippingReport: (params: {
     from: string;
     to: string;
-    fuel_station_ids: Array<number | string>;
+    fuel_station_ids: (number | string)[];
     with_calculated_stock: 0 | 1;
   }) => api.get<DippingStation[]>('/fuel-stations/dipping-report', { params }).then((r) => r.data),
 

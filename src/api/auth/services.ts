@@ -1,5 +1,5 @@
-import { api } from './client';
-import type { CurrentUserResponse, LoginResponse } from '../auth/types';
+import { api } from '../client';
+import type { CurrentUserResponse, LoginResponse } from '../../auth/types';
 
 // These hit API_BASE_URL directly — the same backend endpoints that live-repo's
 // /api/** BFF routes proxy to (e.g. /api/auth/getuser -> GET /getuser).

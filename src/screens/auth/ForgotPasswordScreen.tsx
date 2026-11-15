@@ -3,7 +3,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { authApi } from '../../api/authApi';
+import { authApi } from '../../api/auth/services';
 import { getErrorMessage } from '../../api/client';
 import { applyServerErrors } from '../../auth/serverErrors';
 import { forgotPasswordSchema, type ForgotPasswordValues } from '../../auth/validation';

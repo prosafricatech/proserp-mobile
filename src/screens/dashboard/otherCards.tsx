@@ -7,7 +7,7 @@ import { ActivityIndicator, Chip, Icon, Text } from 'react-native-paper';
 import { useAuth } from '../../auth/AuthProvider';
 import { MODULES } from '../../constants/modules';
 import { dictionary, format, language } from '../../i18n';
-import { dashboardApi } from '../../modules/dashboard/api';
+import { dashboardApi } from '../../api/modules/dashboard/services';
 import { MENU, type MenuNode } from '../../navigation/moduleRegistry';
 import { fonts } from '../../theme/palette';
 import { useAppTheme } from '../../theme/ThemeProvider';

@@ -7,7 +7,7 @@ import { ActivityIndicator, Button, Divider, List, Snackbar, Text } from 'react-
 import { getErrorMessage } from '../../api/client';
 import { useAuth } from '../../auth/AuthProvider';
 import { dictionary } from '../../i18n';
-import { profileApi } from '../../modules/profile/api';
+import { profileApi } from '../../api/modules/profile/services';
 import UserAvatar from '../../components/common/UserAvatar';
 import { fonts } from '../../theme/palette';
 import { useAppTheme } from '../../theme/ThemeProvider';

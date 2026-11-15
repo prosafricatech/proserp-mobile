@@ -4,7 +4,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Icon, Text } from 'react-native-paper';
 import { dictionary } from '../../i18n';
-import { dashboardApi, type DashboardSummary } from '../../modules/dashboard/api';
+import { dashboardApi, type DashboardSummary } from '../../api/modules/dashboard/services';
 import { fonts } from '../../theme/palette';
 import { useAppTheme } from '../../theme/ThemeProvider';
 import { useDashboardSettings } from './DashboardContext';

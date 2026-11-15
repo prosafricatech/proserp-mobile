@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Badge, IconButton } from 'react-native-paper';
-import { notificationsApi } from '../../modules/notifications/api';
+import { notificationsApi } from '../../api/modules/notifications/services';
 import { useAppTheme } from '../../theme/ThemeProvider';
 
 // Header bell with the unread count, like live-repo's NotificationBell. Polls every minute

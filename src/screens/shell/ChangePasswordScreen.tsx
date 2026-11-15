@@ -12,7 +12,7 @@ import { FormMessage } from '../../components/auth/AuthLinks';
 import GradientButton from '../../components/auth/GradientButton';
 import TextField from '../../components/form/TextField';
 import { dictionary } from '../../i18n';
-import { profileApi } from '../../modules/profile/api';
+import { profileApi } from '../../api/modules/profile/services';
 import type { RootStackParamList } from '../../navigation/RootNavigator';
 import { useAppTheme } from '../../theme/ThemeProvider';
 

@@ -37,7 +37,7 @@ export default function Filters() {
 
   const preset = (from: dayjs.Dayjs) =>
     setChartFilters((f) => ({ ...f, from: from.toISOString(), to: dayjs().toISOString() }));
-  const presets: Array<[string, () => void]> = [
+  const presets: [string, () => void][] = [
     [t.cards.presets.today, () => preset(dayjs().startOf('day'))],
     [t.cards.presets.last7, () => preset(dayjs().subtract(6, 'day').startOf('day'))],
     [t.cards.presets.last30, () => preset(dayjs().subtract(29, 'day').startOf('day'))],
@@ -148,7 +148,7 @@ function DateTimeField({
 }
 
 // live-repo masters/costCenters/CostCenterSelector.tsx (multiple, grouped by type).
-const TYPE_ORDER: Array<[string | null, keyof typeof dictionary.dashboard.costCenterTypes]> = [
+const TYPE_ORDER: [string | null, keyof typeof dictionary.dashboard.costCenterTypes][] = [
   [null, 'unspecified'],
   ['Work Center', 'workCenter'],
   ['Sales Outlet', 'salesOutlet'],

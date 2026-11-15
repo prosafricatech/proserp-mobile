@@ -1,5 +1,5 @@
-import { api } from '../../api/client';
-import type { Paginated } from '../../auth/types';
+import { api } from '../../client';
+import type { Paginated } from '../../../auth/types';
 
 // Port of live-repo src/components/notifications/notification-services.ts.
 export type NotificationItem = {
@@ -12,7 +12,7 @@ export type NotificationItem = {
     action_url: string | null;
     resource_type: string | null;
     resource_id: number | string | null;
-    meta?: Array<{ label: string; value: string }>;
+    meta?: { label: string; value: string }[];
   };
   read_at: string | null;
   created_at: string;

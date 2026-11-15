@@ -1,5 +1,5 @@
-import { api } from '../../api/client';
-import { appendFile, type PickedFile } from '../../api/upload';
+import { api } from '../../client';
+import { appendFile, type PickedFile } from '../../upload';
 
 // Port of live-repo src/components/profile/{ChangePasswordForm,UserPhotoUpload}.tsx.
 export const profileApi = {

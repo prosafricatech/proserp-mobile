@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
+import { isAxiosError } from 'axios';
 import React, {
   createContext,
   useCallback,
@@ -9,7 +9,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { authApi } from '../api/authApi';
+import { authApi } from '../api/auth/services';
 import { setApiSession, setUnauthorizedHandler } from '../api/client';
 import { tokenStorage } from '../api/tokenStorage';
 import * as perms from './permissions';
@@ -175,7 +175,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         await authApi.getCurrentUser({ skipSessionCheck: true });
       } catch (error) {
-        if (axios.isAxiosError(error) && error.response?.status === 401) {
+        if (isAxiosError(error) && error.response?.status === 401) {
           await resetAuth();
         }
       } finally {
@@ -207,7 +207,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (cancelled) return;
         // 401 is handled by the interceptor (resetAuth). Anything else — usually
         // no network — should not throw away a token that may still be valid.
-        const isUnauthorized = axios.isAxiosError(error) && error.response?.status === 401;
+        const isUnauthorized = isAxiosError(error) && error.response?.status === 401;
         if (!isUnauthorized) {
           setState({ ...signedOutState, status: 'bootError' });
         }

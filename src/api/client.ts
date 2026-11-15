@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import { create, isAxiosError, type AxiosError } from 'axios';
 import { env } from '../config/env';
 
 // Client-side replacement for live-repo's getAuthHeaders() (src/lib/utils/apiUtils.ts).
@@ -34,7 +34,7 @@ const timezone = (() => {
   }
 })();
 
-export const api = axios.create({
+export const api = create({
   baseURL: env.apiBaseUrl,
   timeout: 60000,
   headers: {
@@ -83,7 +83,7 @@ api.interceptors.response.use(
 // Most endpoints use { errors: {...} } (422); POST /register uses { validation_errors: {...} }
 // (400).
 export const getFieldErrors = (error: unknown): Record<string, string> => {
-  if (!axios.isAxiosError(error)) return {};
+  if (!isAxiosError(error)) return {};
   const data = error.response?.data as any;
   const bag: Record<string, string[] | string> | undefined =
     data?.errors ?? data?.validation_errors;
@@ -98,7 +98,7 @@ export const getFieldErrors = (error: unknown): Record<string, string> => {
 
 // Laravel-style error bodies: { message } or { errors | validation_errors: { field: [msg] } }.
 export const getErrorMessage = (error: unknown, fallback = 'Something went wrong') => {
-  if (axios.isAxiosError(error)) {
+  if (isAxiosError(error)) {
     if (!error.response) {
       // No HTTP response at all: DNS/TLS/CORS/timeout. In dev, surface the real cause.
       if (__DEV__) {

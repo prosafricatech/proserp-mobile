@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Menu, Text, TextInput } from 'react-native-paper';
 import { Pressable } from 'react-native';
 import { dictionary } from '../../i18n';
-import type { Interval } from '../../modules/dashboard/api';
+import type { Interval } from '../../api/modules/dashboard/services';
 import { fonts } from '../../theme/palette';
 import { useAppTheme } from '../../theme/ThemeProvider';
 
@@ -57,7 +57,7 @@ export function SelectMenu<T extends string | number>({
 }: {
   label: string;
   value: T;
-  options: Array<[T, string]>;
+  options: [T, string][];
   onChange: (v: T) => void;
   width?: number;
 }) {

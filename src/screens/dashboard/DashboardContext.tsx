@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useAuth } from '../../auth/AuthProvider';
-import type { CostCenterIds } from '../../modules/dashboard/api';
+import type { CostCenterIds } from '../../api/modules/dashboard/services';
 
 export type CostCenter = {
   id: number | string;

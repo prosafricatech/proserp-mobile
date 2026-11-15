@@ -25,7 +25,7 @@ import { MODULES } from '../../constants/modules';
 import { PERMISSIONS } from '../../constants/permissions';
 import { PROS_CONTROL_PERMISSIONS } from '../../constants/prosControlPermissions';
 import { dictionary } from '../../i18n';
-import { organizationsApi, type OrganizationValues } from '../../modules/organizations/api';
+import { organizationsApi, type OrganizationValues } from '../../api/modules/organizations/services';
 import type { RootStackParamList } from '../../navigation/RootNavigator';
 import { darkPalette, fonts, lightPalette } from '../../theme/palette';
 import { useAppTheme } from '../../theme/ThemeProvider';

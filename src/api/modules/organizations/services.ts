@@ -1,6 +1,6 @@
-import { api } from '../../api/client';
-import { toFormData, type PickedFile } from '../../api/upload';
-import type { AuthOrganization, AuthUser, Organization, Paginated } from '../../auth/types';
+import { api } from '../../client';
+import { toFormData, type PickedFile } from '../../upload';
+import type { AuthOrganization, AuthUser, Organization, Paginated } from '../../../auth/types';
 
 // Every field of live-repo's OrganizationForm.tsx.
 export type OrganizationValues = {
@@ -42,7 +42,7 @@ export type CreateOrganizationResponse = {
 export type OrganizationListItem = Organization & {
   website?: string | null;
   autoload?: boolean;
-  roles?: Array<{ id?: string | number; name: string }>; // the signed-in user's roles in it
+  roles?: { id?: string | number; name: string }[]; // the signed-in user's roles in it
 };
 
 export const organizationsApi = {

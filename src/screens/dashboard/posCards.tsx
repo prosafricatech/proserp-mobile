@@ -17,7 +17,7 @@ import { getErrorMessage } from '../../api/client';
 import { useAuth } from '../../auth/AuthProvider';
 import { dictionary } from '../../i18n';
 import { escapeHtml, shareExcel, sharePdf } from '../../lib/files/share';
-import { dashboardApi, type ProductSale } from '../../modules/dashboard/api';
+import { dashboardApi, type ProductSale } from '../../api/modules/dashboard/services';
 import { fonts } from '../../theme/palette';
 import { useAppTheme } from '../../theme/ThemeProvider';
 import { useDashboardSettings } from './DashboardContext';
@@ -47,7 +47,7 @@ const productSalesHtml = (
     params: any;
     user?: string;
     salesPersons: string[];
-    costCenters: Array<{ name: string }>;
+    costCenters: { name: string }[];
   }
 ) => {
   const main = o.org?.settings?.main_color || '#2113AD';
