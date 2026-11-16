@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { useAppTheme } from '../../theme/ThemeProvider';
 
-// Web's JumboIconButton / SidebarToggleButton: a round button raised with a shadow.
+// Equivalent to the web's SidebarToggleButton: a round button raised with a shadow.
 export default function RoundIconButton(props: {
   icon: string;
   onPress: () => void;

@@ -15,7 +15,7 @@ import { tokenStorage } from '../api/tokenStorage';
 import * as perms from './permissions';
 import type { AuthOrganization, AuthUser, CurrentUserResponse, LoginResponse } from './types';
 
-// Mobile port of live-repo's JumboAuthProvider. Differences from the web version:
+// Mobile port of live-repo auth provider. Differences from the web version:
 // - storage is async (SecureStore) so there is an explicit 'loading' status on boot
 // - the bearer token is ours to hold; there is no next-auth cookie
 // - "onlyAuthAccessData" route lists are replaced by RootNavigator rendering
@@ -130,7 +130,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [persistSession, loadOrganization]
   );
 
-  // Mirrors JumboAuthProvider.signUp: POST /register; if the backend returns a session,
+  // Mirrors the web auth provider's sign-up flow: POST /register; if the backend returns a session,
   // keep it — RootNavigator then shows the verify-email screen until the email is verified.
   const signUp = useCallback(
     async (values: SignUpValues) => {

@@ -1,6 +1,6 @@
 import { useAuth } from '../../../auth/AuthProvider';
 import { costCentersApi } from '../../../api/modules/masters/costCenters/services';
-import JumboRqList from '../../../components/list/JumboRqList';
+import ProsRqList from '../../../components/list/ProsRqList';
 import { dictionary } from '../../../i18n';
 import type { CostCenter } from '../../../api/modules/masters/types';
 import CostCenterActionTail from './CostCenterActionTail';
@@ -11,7 +11,7 @@ export function CostCenters() {
   const queryKey = ['masters', authOrganization?.organization.id, 'costCenters'];
 
   return (
-    <JumboRqList<CostCenter, Record<string, never>>
+    <ProsRqList<CostCenter, Record<string, never>>
       title={dictionary.masters.costCenters.title}
       queryKey={queryKey}
       fetchPage={costCentersApi.list}

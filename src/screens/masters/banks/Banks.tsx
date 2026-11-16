@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '../../../auth/AuthProvider';
 import { banksApi } from '../../../api/modules/masters/banks/services';
-import JumboRqList from '../../../components/list/JumboRqList';
+import ProsRqList from '../../../components/list/ProsRqList';
 import { dictionary } from '../../../i18n';
 import type { Bank } from '../../../api/modules/masters/types';
 import BankActionTail from './BankActionTail';
@@ -13,7 +13,7 @@ export function Banks() {
   const queryKey = ['masters', organizationId, 'banks'];
 
   return (
-    <JumboRqList<Bank, Record<string, never>>
+    <ProsRqList<Bank, Record<string, never>>
       title={dictionary.masters.banks.title}
       queryKey={queryKey}
       fetchPage={banksApi.list}

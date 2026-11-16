@@ -54,7 +54,7 @@ export default function OrganizationsScreen({ navigation }: Props) {
   const canCreate = checkPermission(PROS_CONTROL_PERMISSIONS.ORGANIZATIONS_MANAGE);
   const activeId = authOrganization?.organization?.id;
 
-  // Debounce the search like JumboSearch does.
+  // Debounce the search like web search component does.
   useEffect(() => {
     const timer = setTimeout(() => setSearch(keyword.trim()), 400);
     return () => clearTimeout(timer);

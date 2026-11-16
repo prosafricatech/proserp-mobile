@@ -19,7 +19,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'ForgotPassword'>;
 const t = dictionary.forgotPassword;
 
 // Port of live-repo src/components/resetPassword/ResetPassword.tsx (the no-token branch).
-// Note: web's /auth/forgot-password page is leftover Jumbo template with no submit; the
+// Note: web's /auth/forgot-password page is leftover web template with no submit; the
 // real flow is /auth/reset-password, which POSTs /recover-password like this screen.
 export default function ForgotPasswordScreen({ navigation }: Props) {
   const {

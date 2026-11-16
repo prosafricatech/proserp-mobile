@@ -3,7 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 // SecureStore is the mobile replacement for httpOnly next-auth cookie.
 // Only small secrets live here: the bearer token and the active organization id.
 // Profile data (authUser/authOrganization) is re-fetched from GET /getuser on boot,
-// the same way JumboAuthProvider's refreshAuth() does.
+// the same way live-repo auth provider's refreshAuth() does.
 const TOKEN_KEY = 'proserp.token';
 const ORGANIZATION_ID_KEY = 'proserp.organizationId';
 

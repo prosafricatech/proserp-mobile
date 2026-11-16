@@ -1,6 +1,6 @@
 import type { AuthOrganization, AuthUser } from './types';
 
-// Ported from live-repo JumboAuthProvider.tsx as pure functions so they can be
+// Ported from live-repo's auth provider as pure functions so they can be
 // unit-tested without a provider. AuthProvider binds them to the current session.
 
 const toArray = (value: string | string[]) => (Array.isArray(value) ? value : [value]);

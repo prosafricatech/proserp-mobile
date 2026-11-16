@@ -41,7 +41,7 @@ Read [`AGENTS.md`](./AGENTS.md) for Expo SDK, tooling, and environment-specific 
 
 ## Shared forms, lists, and master data
 
-- Use `src/components/list/JumboRqList/` for universal searchable, paginated mobile lists. Each feature screen should compose it directly with that feature's service, list item, and action tail.
+- Use `src/components/list/ProsRqList/` for universal searchable, paginated mobile lists. Each feature screen should compose it directly with that feature's service, list item, and action tail.
 - Follow the live-repo feature ownership pattern: keep `<Feature>ActionTail`, `<Feature>ListItem`, `<Feature>ItemActions`, and `<Feature>Form` in the feature folder. The action tail owns create visibility and its dialog; item actions own row actions, permissions, and their dialogs; the form owns its fields, validation, mutation, feedback, and query invalidation.
 - Render each form's fields directly in its feature form with the project's field controls (`TextField`, `SelectField`, `AsyncAutocompleteField`, `DateField`, and native Paper controls) and Yup validation. Do not add `FormKit`, resource-definition objects, or generic CRUD screen/hook layers between a feature and its UI; keep request mapping in that feature's service or form/action component, following the live-repo ownership pattern.
 - Async selectors debounce search and wait for at least two characters before requesting matches. Scope query keys to the resource and any changing organization/resource ID.

@@ -8,7 +8,7 @@ import { useAppTheme } from '../../theme/ThemeProvider';
 
 const t = dictionary.dashboard;
 
-// JumboCardQuick: header (title left, action right) + body.
+// web quick card: header (title left, action right) + body.
 export function Card({
   title,
   action,

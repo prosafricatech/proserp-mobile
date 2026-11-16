@@ -15,14 +15,14 @@ import { dictionary } from '../../../i18n';
 import { fonts } from '../../../theme/palette';
 import { useAppTheme } from '../../../theme/ThemeProvider';
 import { EmptyState, ErrorState } from '../../common/ScreenState';
-import type { JumboRqPage, JumboRqPageRequest, JumboRqPageResponse } from './types';
+import type { ProsRqPage, ProsRqPageRequest, ProsRqPageResponse } from './types';
 
-function readPage<T>(result: JumboRqPageResponse<T>) {
-  const page: JumboRqPage<T> = Array.isArray(result)
+function readPage<T>(result: ProsRqPageResponse<T>) {
+  const page: ProsRqPage<T> = Array.isArray(result)
     ? { data: result }
     : 'current_page' in result || 'last_page' in result
-      ? (result as JumboRqPage<T>)
-      : (result as { data: JumboRqPage<T> }).data;
+      ? (result as ProsRqPage<T>)
+      : (result as { data: ProsRqPage<T> }).data;
   return {
     items: Array.isArray(page.data) ? page.data : [],
     currentPage: page.current_page ?? 1,
@@ -34,7 +34,7 @@ function readPage<T>(result: JumboRqPageResponse<T>) {
 type Props<T, F extends Record<string, unknown>> = {
   title: string;
   queryKey: readonly unknown[];
-  fetchPage: (params: JumboRqPageRequest<F>) => Promise<JumboRqPageResponse<T>>;
+  fetchPage: (params: ProsRqPageRequest<F>) => Promise<ProsRqPageResponse<T>>;
   filters: F;
   emptyFilters: F;
   onFiltersChange: (filters: F) => void;
@@ -49,7 +49,7 @@ type Props<T, F extends Record<string, unknown>> = {
 
 // Shared FlatList pattern for searchable master data: debounced server search,
 // pagination, pull-to-refresh, filter sheet, and consistent empty/error states.
-export default function JumboRqList<T, F extends Record<string, unknown>>({
+export default function ProsRqList<T, F extends Record<string, unknown>>({
   title,
   queryKey,
   fetchPage,

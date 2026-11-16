@@ -16,7 +16,7 @@ import {
 import { darken, lighten } from './color';
 import { darkPalette, fonts, lightPalette, type Palette } from './palette';
 
-// Equivalent of live-repo's useJumboTheme() + ThemeModeOption: light by default, and the
+// Equivalent of live-repo's web theme hook + ThemeModeOption: light by default, and the
 // user's light/dark choice is remembered ('system' remains available but isn't the default).
 export type ThemeMode = 'system' | 'light' | 'dark';
 
